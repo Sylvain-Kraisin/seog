@@ -30,7 +30,7 @@ import marketgirl from './assets/images/marketing.jpeg'
 //   name: React.PropTypes.string
 // }
 
-var Toto = "je suis toto"
+var Toto = "je suis toto 34"
 console.log(Toto)
 
 var week = 1;
