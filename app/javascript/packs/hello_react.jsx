@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar } from 'recharts'
+//import ReactFitText from 'react-fittext'
 import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table } from 'react-bootstrap'
 
 import logo from './assets/images/logo.png'
@@ -16,6 +17,7 @@ import teacherguy from './assets/images/teacher.jpeg'
 import bossguy from './assets/images/boss.jpeg'
 import marketgirl from './assets/images/marketing.jpeg'
 
+//EXAMPLES
 // const Hello = props => (
 //   <div>Hello {props.name}!</div>
 // )
@@ -27,12 +29,6 @@ import marketgirl from './assets/images/marketing.jpeg'
 // Hello.propTypes = {
 //   name: React.PropTypes.string
 // }
-
-window.Post = React.createClass({
-  render: function() {
-    return <h1>{this.props.title}</h1>
-  }
-})
 
 var Toto = "je suis toto"
 console.log(Toto)
@@ -619,7 +615,8 @@ export default class Boss_Start extends Component {
         this.state = {
             week: week,
             kpi: 'Visits',
-            kpiValue: 0,
+            kpiValue: evoData[0].visits,
+            kpiEvo: 0,
             evoData: evoData,
             segData: segData,
             selected_kpi: 'visits',
@@ -1121,6 +1118,11 @@ export default class Boss_Start extends Component {
             week: week,
             evoData: evoData,
             segData: segData,
+            kpiValue: evoData[this.state.week].visits,
+            kpiEvo: this.evoDiff(evoData, this.state.week + 1, "visits"),
+            kpi: 'Visits',
+            selected_kpi: 'visits',
+            key: 'first'
         });
         console.log("setColorUp(this.state.week)");
         console.log(this.state.week);
@@ -1128,12 +1130,13 @@ export default class Boss_Start extends Component {
     }
 
 
-    displayEVO(event, name, selectedkpi, kpiValue, kpiTextDef, kpiTextToDo) {
+    displayEVO(event, name, selectedkpi, kpiValue, kpiEvo, kpiTextDef, kpiTextToDo) {
 
         this.setState({
             week: week,
             kpi: name,
             kpiValue: kpiValue,
+            kpiEvo: kpiEvo,
             evoData: evoData,
             segData: segData,
             selected_kpi: selectedkpi,
@@ -1262,15 +1265,17 @@ export default class Boss_Start extends Component {
                                         </div>
                                        </Col>
                                     </Row>
-                                    <Row className="show-grid">
+                                    <Row className="col-1">
                                         <Col xs={6} className="kpi-box">
-                                           <div className="smallkpi">
-                                              <span className="smallkpitext">{this.state.kpiValue}K</span>
+                                            <div className="smallkpi">
+                                                <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
                                             </div>
+                                        </Col>
+                                        <Col xs={6} className="kpi-box">
                                             <div className="smallevo">
-                                              <span className="smallevotext">-X%</span>
+                                              <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
                                             </div>
-                                       </Col>
+                                        </Col>
                                     </Row>
 
 
@@ -1283,8 +1288,8 @@ export default class Boss_Start extends Component {
 
                                     <Tab eventKey={1} title="Main">
                                         <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits','visits', this.state.evoData[week-1].visits, kpiTextData.visits.def, kpiTextData.visits.todo)}>Visits</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week-1].pages, kpiTextData.pages.def, kpiTextData.pages.todo)}>Pages</Button>
+                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits','visits', this.state.evoData[week-1].visits, this.evoDiff(evoData, this.state.week, "visits"), kpiTextData.visits.def, kpiTextData.visits.todo)}>Visits</Button>
+                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Pages</Button>
                                         </ButtonToolbar>
                                         <ButtonToolbar className="kpis-tab">
                                           <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Indexability Ratio', 'indexable_ratio')}>Indexability Ratio</Button>
@@ -1343,7 +1348,7 @@ export default class Boss_Start extends Component {
                                     <tbody>
                                         <tr>
                                             <td className="def-tab-labels">KPI name</td>
-                                            <td className="def-tab-kpi">{this.state.kpi}</td>
+                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
                                         </tr>
                                         <tr>
                                             <td className="def-tab-labels">Definition</td>
