@@ -85,12 +85,14 @@ body {
 
 .barbutton {
     width: 100%;
-    padding: 18px 15px;
+    padding: 18px 20px;
     text-align: left;
+    font-family: 'Cabin', Arial, sans-serif;
+    
 }
 
 ul.nav {
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     font-size: 1.3em;
     font-weight: 400;
     text-transform: uppercase;
@@ -155,7 +157,7 @@ h2 {
     margin: 0;
     padding: 0;
     border-radius: 4px;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     font-weight: 400;
     margin-bottom: 20px;
 }
@@ -236,8 +238,7 @@ img.guyimage {
 .left-1 h3.kpi {
     margin: 0;
     padding: 36px 20px;
-    text-transform: uppercase;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
     border: 2px solid black;
     border-radius: 4px;
@@ -256,7 +257,7 @@ img.guyimage {
     margin: 0;
     padding: 16px 10px;
     text-transform: uppercase;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
     border: 2px solid black;
     border-radius: 4px;
@@ -282,18 +283,62 @@ img.guyimage {
     margin-bottom: 5px;
 }
 
-.btn-toolbar>.kpibut-2 {
-    width: 50%;
-    height: 70px;
+.btn-toolbar>.kpibut-2, .btn-toolbar>.kpibut-2-3 {
+    width: 100%;
+    height: 40px;
+    font-family: 'Raleway', Arial, sans-serif;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
-.kpibut-2-3 {
-    width: 50%;
-}
 
 .btn-toolbar>.kpibut-3 {
-    width: 33.3%;
-    height: 100px;
+    width:  100%;
+    height: 40px;
+    font-weight: bold;
+}
+
+.barbutton-2 {
+    width: 100%;
+    padding: 18px 15px;
+    text-align: center;
+    height: 65px;
+    font-family: 'Raleway', Arial, sans-serif;
+    font-weight: bold;
+}
+
+.col-kpis {
+    padding-right: 0px;
+}
+
+.kpis-tab-buttons {
+    margin: 0;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:focus {
+    background: none;
+}
+
+.kpis-selection {
+    background: #f7b267;
+    margin: 0;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Raleway', Arial, sans-serif;
+    font-weight: 400;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+#kpis-tab {
+    margin-top: 0px;
+}
+
+.select-kpi {
+    padding: 10px;
+    margin: 0px;
+    height: 45px;
 }
 
 #kpistab ul {
@@ -377,12 +422,47 @@ h2.weektitle {
     margin-bottom: 10px;
 }
 
+.smallimage {
+    float: left;
+    width: 100px;
+    height: 100px;
+    background: lightskyblue;
+    border: 1px solid black;
+    border-radius: 4px;
+    margin-top: 16px;
+}
+
+.title-div {
+    border: 3px solid black;
+    border-radius: 4px;
+    font-size: 1em;
+    margin-top: 20px;
+    font-family: 'Raleway', Arial, sans-serif;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    background: #e0e0e0;
+}
+
+.title-h1 {
+    font-size: 4em;
+    padding-left: 20px;
+    font-weight: bolder;
+    margin-left: 100px;
+    line-height: 0.8em;
+}
+.title-p {
+    font-size: 1.7em;
+    padding-left: 20px;
+    margin-left: 100px;
+}
+
+
 h3.kpiname {
     height: 200px;
     margin: 0;
     padding: 36px 20px;
     text-transform: uppercase;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
     border: 2px solid black;
     border-radius: 4px;
@@ -401,7 +481,7 @@ h3.kpievo {
 .kpi-name {
     height: 200px;
     margin: 0;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     font-size: 2em;
     line-height: 1.5em;
 }
@@ -410,7 +490,7 @@ h3.kpievo {
     height: 200px;
     margin: 0;
     padding: 36px 20px;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
     text-align: left;
     border: 2px solid black;
     border-radius: 4px;
@@ -419,54 +499,57 @@ h3.kpievo {
 }
 
 .bigkpi {
-    height: 200px;
-    line-height: 200px;
+    height: 158px;
+    line-height: 158px;
     text-align: center;
     border: 2px solid black;
     margin-top: 20px;
+    border-radius: 4px;
 }
 
 .bigkpitext {
     display: inline-block;
     vertical-align: middle;
-    line-height: normal;
-    font-size: 2.6em;
+    line-height: 1em;
+    font-size: 3.8em;
     font-weight: bold;
     padding: 20px;
 }
 
 .smallkpi {
-    height: 120px;
-    line-height: 120px;
+    height: 126px;
+    line-height: 126px;
     text-align: center;
     border: 2px solid black;
     margin-top: 10px;
     margin-right: 5px;
+    border-radius: 4px;
 }
 
 .smallkpitext {
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
-    font-size: 2em;
+    font-size: 3em;
     font-weight: bold;
     padding: 20px;
 }
 
 .smallevo {
-    height: 120px;
-    line-height: 120px;
+    height: 126px;
+    line-height: 126px;
     text-align: center;
     border: 2px solid black;
     margin-top: 10px;
     margin-left: 5px;
+    border-radius: 4px;
 }
 
 .smallevotext {
     display: inline-block;
     vertical-align: middle;
     line-height: normal;
-    font-size: 2em;
+    font-size: 3em;
     font-weight: bold;
     padding: 20px;
 }
@@ -474,7 +557,7 @@ h3.kpievo {
 .def-tab {
     font-size: 1.3em;
     padding: 20px;
-    font-family: 'Cabin', sans-serif;
+    font-family: 'Raleway', Arial, sans-serif;
 }
 
 .def-tab-labels-kpi {
@@ -488,7 +571,7 @@ h3.kpievo {
 
 .def-tab-labels {
     padding: 10px !important;
-    width: 40%;
+    width: 35%;
     font-size: 1.2em;
     text-transform: uppercase;
     font-weight: bold;

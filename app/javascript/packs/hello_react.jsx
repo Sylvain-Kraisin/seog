@@ -6,14 +6,14 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar, RadialBarChart, RadialBar} from 'recharts'
 //import ReactFitText from 'react-fittext'
 import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table } from 'react-bootstrap'
 
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
 import techguy from './assets/images/tech.jpeg'
-import teacherguy from './assets/images/teacher.jpeg'
+import teacherguy from './assets/images/teacher.jpeg.png'
 import bossguy from './assets/images/boss.jpeg'
 import marketgirl from './assets/images/marketing.jpeg'
 
@@ -30,6 +30,16 @@ import marketgirl from './assets/images/marketing.jpeg'
 //   name: React.PropTypes.string
 // }
 
+const style = {
+    top: 165,
+    left: 20,
+  	lineHeight: '24px'
+  };
+
+const datapie = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
+                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
+                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}];
+
 var Toto = "je suis toto 34"
 console.log(Toto)
 
@@ -39,8 +49,8 @@ var weekLabels = ["W1"];
 const pagesLabels = ["Top", "Middle", "Long", "Paginations", "Useless"];
 
 const ini_blog = {
-    visits_byAP_comp: [1498, 280, 5, 0, 0],
-    visits_byAP_notcomp: [150, 28, 1, 0, 0],
+    visits_byAP_comp: [1498, 280, 5, 1, 1],
+    visits_byAP_notcomp: [150, 28, 1, 1, 1],
     crawled_ratio_comp: [100, 80, 40, 60, 50],
     crawled_ratio_notcomp: [100, 100, 50, 100, 60],
     comp_pages: [10, 90, 18700, 150, 0],
@@ -147,7 +157,7 @@ console.log(natevo);
 
 var segData = [
     {
-        name: 'Top',
+        name: 'Top Pages',
 
         visits: ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100 + ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
 
@@ -194,11 +204,13 @@ var segData = [
         pct_duptitles: ini_blog.pct_DupTitles[0],
         avg_words: ini_blog.avg_Words[0],
         avg_unicity: ini_blog.avg_unicity[0],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[0]
+        avg_AnchorsVar: ini_blog.avg_AnchorsVar[0],
+        
+        fill: '#8884d8'
 
     },
     {
-        name: 'Middle',
+        name: 'Categories',
 
         visits: ini_blog.visits_byAP_comp[1]* 0.8 *ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100 + ini_blog.visits_byAP_notcomp[1] * Math.round(1*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
 
@@ -245,11 +257,13 @@ var segData = [
         pct_duptitles: ini_blog.pct_DupTitles[1],
         avg_words: ini_blog.avg_Words[1],
         avg_unicity: ini_blog.avg_unicity[1],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[1]
+        avg_AnchorsVar: ini_blog.avg_AnchorsVar[1],
+        
+        fill: '#83a6ed'
 
     },
     {
-        name: 'Long',
+        name: 'Articles',
 
         visits: ini_blog.visits_byAP_comp[2]* 0.4 *ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100 + ini_blog.visits_byAP_notcomp[2] * Math.round(1*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
 
@@ -296,7 +310,9 @@ var segData = [
         pct_duptitles: ini_blog.pct_DupTitles[2],
         avg_words: ini_blog.avg_Words[2],
         avg_unicity: ini_blog.avg_unicity[2],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[2]
+        avg_AnchorsVar: ini_blog.avg_AnchorsVar[2],
+        
+        fill: '#8dd1e1'
 
     },
     {
@@ -347,11 +363,13 @@ var segData = [
         pct_duptitles: ini_blog.pct_DupTitles[3],
         avg_words: ini_blog.avg_Words[3],
         avg_unicity: ini_blog.avg_unicity[3],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[3]
+        avg_AnchorsVar: ini_blog.avg_AnchorsVar[3],
+        
+        fill: '#d0ed57'
 
     },
     {
-        name: 'Useless',
+        name: 'Useless Pages',
 
         visits: ini_blog.visits_byAP_comp[4]* 0 *ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100 + ini_blog.visits_byAP_notcomp[4] * Math.round(1*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
 
@@ -398,7 +416,9 @@ var segData = [
         pct_duptitles: ini_blog.pct_DupTitles[4],
         avg_words: ini_blog.avg_Words[4],
         avg_unicity: ini_blog.avg_unicity[4],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[4]
+        avg_AnchorsVar: ini_blog.avg_AnchorsVar[4],
+        
+        fill: '#ffc658'
 
     }
 ];
@@ -471,6 +491,8 @@ var evoData = [
     }
 ];
 
+
+
 var allSegData = [];
 allSegData.push(segData);
 
@@ -505,7 +527,7 @@ var crawled_notcomp_pagesData = [evoData[0].crawled_notcomp_pages];
 var active_comp_pagesData = [evoData[0].active_comp_pages];
 var active_notcomp_pagesData = [evoData[0].active_notcomp_pages];
 
-var avg_loadtimesData = [evoData[0].avg_loadtimesData];
+var avg_loadtimesData = [evoData[0].avg_loadtimes];
 var avg_depthData = [evoData[0].avg_depth];
 var avg_badhttpData = [evoData[0].avg_badhttp];
 var avg_inlinksData = [evoData[0].avg_inlinks];
@@ -527,39 +549,112 @@ const kpiTextData = {
             impo: "Basic",
             todo: "To increase your Visits, you need to analyze all the KPIs, and then spend credits on Marketing and Technical SEO Tasks."
         },
-        active_pages: 0,
+        active_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        visits_byAP_comp: 0,
+        visits_byAP_comp: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        indexable_ratio: 0,
-        active_ratio_oncomp: 0,
-        crawl_ratio_oncomp: 0,
+        indexable_ratio: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        active_ratio_oncomp: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        crawl_ratio_oncomp: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
         pages: {
             def: "The number of pages in your website structure. It contains both Indexable and Not Indexable Pages.",
             todo: "Make sure you have a maximum number of Indexable Pages to generate more organic traffic."
         },
-        comp_pages: 0,
-        notcomp_pages: 0,
+        comp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        notcomp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        crawled_comp_pages: 0,
-        notcrawled_comp_pages: 0,
+        crawled_comp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        crawled_notcomp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        crawled_notcomp_pages: 0,
-        notcrawled_notcomp_pages: 0,
+        active_comp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        active_notcomp_pages: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        avg_loadtimes: 0,
-        avg_depth: 0,
-        avg_badhttp: 0,
-        avg_inlinks: 0,
+        avg_loadtimes: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        avg_depth: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        avg_badhttp: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        avg_inlinks: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
 
-        avg_words: 0,
-        avg_unicity: 0,
-        pct_duptitles: 0,
-        pct_duph1: 0,
-        pct_dupdesc: 0,
-        avg_unicity: 0,
-        avg_AnchorsVar: 0
+        avg_words: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        pct_duptitles: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        avg_unicity: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        },
+        avg_AnchorsVar: {
+            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
+            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
+            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
+        }
 }
 
 const bossText =  {
@@ -1030,7 +1125,11 @@ export default class Boss_Start extends Component {
 
         avg_depthData.push(Math.round(10*(segData[0].avg_depth * segData[0].comp_pages + segData[1].avg_depth * segData[1].comp_pages + segData[2].avg_depth * segData[2].comp_pages + segData[3].avg_depth * segData[3].comp_pages + segData[4].avg_depth * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10);
 
+        
         avg_loadtimesData.push(Math.round((segData[0].avg_loadtimes * segData[0].comp_pages + segData[1].avg_loadtimes * segData[1].comp_pages + segData[2].avg_loadtimes * segData[2].comp_pages + segData[3].avg_loadtimes * segData[3].comp_pages + segData[4].avg_loadtimes * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)));
+        
+        console.log("avg_loadtimesData");
+        console.log(avg_loadtimesData);
 
         avg_badhttpData.push((segData[0].avg_badhttp + segData[1].avg_badhttp + segData[2].avg_badhttp + segData[3].avg_badhttp + segData[4].avg_badhttp));
 
@@ -1254,8 +1353,85 @@ export default class Boss_Start extends Component {
                         </Row>
               </Tab.Pane>
               <Tab.Pane eventKey="second" >
+                        <div className="title-div">
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">SEO KPIs Analysis</h1>
+                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
+                        </div>
 
                         <Row className="show-grid">
+                        <Col md={12} lg={6}>
+                            
+                           <div className="kpis-selection">
+                              <Tab.Container id="kpis-tab" defaultActiveKey="one">
+                                <Row className="clearfix">
+                                  <Col sm={4} className="col-kpis">
+                                    <Nav bsStyle="pills" stacked>
+                                        <NavItem eventKey="one"><Button bsStyle="default" bsSize="large" className="barbutton-2">GENERAL</Button></NavItem>
+                                        <NavItem eventKey="two"><Button bsStyle="default" bsSize="large" className="barbutton-2">INDEXABILITY</Button></NavItem>
+                                        <NavItem eventKey="three"><Button bsStyle="default" bsSize="large" className="barbutton-2">STRUCTURE</Button></NavItem>
+                                        <NavItem eventKey="four"><Button bsStyle="default" bsSize="large" className="barbutton-2">QUALITY</Button></NavItem>
+                                    </Nav>
+                                  </Col>
+                                  <Col sm={8}>
+                                    <Tab.Content animation className="kpis-tab-buttons">
+                                      <Tab.Pane eventKey="one">
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits','visits', this.state.evoData[week-1].visits, this.evoDiff(evoData, this.state.week, "visits"), kpiTextData.visits.def, kpiTextData.visits.todo)}>Visits</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Pages</Button>
+                                            </ButtonToolbar>
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Indexability Ratio', 'indexable_ratio', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Indexability Ratio</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Crawl Ratio', 'crawl_ratio_oncomp', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawl Ratio</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Active Ratio', 'active_ratio_oncomp', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Ratio</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
+                                            </ButtonToolbar>
+                                            
+                                      </Tab.Pane>
+                                      <Tab.Pane eventKey="two">
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Indexable Pages', 'comp_pages', this.state.evoData[week-1].comp_pages, this.evoDiff(evoData, this.state.week, "comp_pages"),kpiTextData.comp_pages.def, kpiTextData.comp_pages.todo)}>Indexable</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Not Indexable Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Not Indexable</Button>
+                                            </ButtonToolbar>
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Crawled Index. Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawled Indexable</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Crawled Not Index. Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawled Not Indexable</Button>
+                                            </ButtonToolbar>
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Active Index. Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Indexable</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Active Not Index. Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Not Indexable</Button>
+                                            </ButtonToolbar>
+                                      </Tab.Pane>
+                                      <Tab.Pane eventKey="three">
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Internal Links', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Internal Links</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Depth', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Depth</Button>
+                                            </ButtonToolbar>
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Load Times', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Load Times</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Broken Links', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Broken Links</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
+                                            </ButtonToolbar>
+                                      </Tab.Pane>
+                                      <Tab.Pane eventKey="four">
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Dup. Titles', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Dup. Titles</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Words', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Words</Button>
+                                            </ButtonToolbar>
+                                            <ButtonToolbar className="kpis-tab">
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Similar Pages Ratio', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Similarity %</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Anchors Variations', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Anchors Variations</Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
+                                              <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
+                                            </ButtonToolbar>
+                                      </Tab.Pane>
+                                    </Tab.Content>
+                              </Col>
+                            </Row>
+                          </Tab.Container>
+                            </div>
+                            </Col>
                             <Col md={12} lg={6}>
                                 <div className="left-1">
                                     <Row className="col-1">
@@ -1281,65 +1457,6 @@ export default class Boss_Start extends Component {
 
                                 </div>
                             </Col>
-                            <Col md={12} lg={6}>
-                       <div className="left-1">
-                                <div>
-                                  <Tabs defaultActiveKey={1} id="kpistab">
-
-                                    <Tab eventKey={1} title="Main">
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits','visits', this.state.evoData[week-1].visits, this.evoDiff(evoData, this.state.week, "visits"), kpiTextData.visits.def, kpiTextData.visits.todo)}>Visits</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Pages</Button>
-                                        </ButtonToolbar>
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Indexability Ratio', 'indexable_ratio')}>Indexability Ratio</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Crawl Ratio', 'crawl_ratio_oncomp')}>Crawl Ratio</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Active Ratio', 'active_ratio_oncomp')}>Active Ratio</Button>
-                                        </ButtonToolbar>
-                                    </Tab>
-
-                                    <Tab eventKey={2} title="Indexability">
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Indexable Pages', 'pages')}>Indexable</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Not Indexable Pages', 'pages')}>Not Indexable</Button>
-                                        </ButtonToolbar>
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Crawled Index. Pages', 'pages')}>Crawled Indexable</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Crawled Not Index. Pages', 'pages')}>Crawled Not Indexable</Button>
-                                        </ButtonToolbar>
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Active Index. Pages', 'pages')}>Active Indexable</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2-3" onClick={event => this.displayEVO(event,'Active Not Index. Pages', 'pages')}>Active Not Indexable</Button>
-                                        </ButtonToolbar>
-                                    </Tab>
-
-                                    <Tab eventKey={3} title="Structure">
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Internal Links', 'pages')}>Internal Links</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Depth', 'pages')}>Depth</Button>
-                                        </ButtonToolbar>
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Load Times', 'pages')}>Load Times</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Broken Links', 'pages')}>Broken Links</Button>
-                                        </ButtonToolbar>
-
-                                    </Tab>
-
-                                    <Tab eventKey={4} title="Quality">
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Dup. Titles', 'pages')}>Dup. Titles</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Words', 'pages')}>Words</Button>
-                                        </ButtonToolbar>
-                                        <ButtonToolbar className="kpis-tab">
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Similar Pages Ratio', 'pages')}>Similarity %</Button>
-                                          <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Anchors Variations', 'pages')}>Anchors Variations</Button>
-                                        </ButtonToolbar>
-                                    </Tab>
-                                  </Tabs>
-                                </div>
-                            </div>
-                            </Col>
-
                         </Row>
 
                         <Row className="show-grid">
@@ -1382,21 +1499,6 @@ export default class Boss_Start extends Component {
                                    </div>
                                 </div>
                                 <div className="left-1">
-                                <h3>{this.state.kpi}, Distribution</h3>
-                                    <div className="box-3">
-                                    <ResponsiveContainer height={230}>
-                                        <BarChart data={this.state.segData}>
-                                          <XAxis dataKey="name" />
-                                          <YAxis />
-                                          <CartesianGrid strokeDasharray="3 3" />
-                                          <Tooltip />
-
-                                          <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                    </div>
-                                </div>
-                                <div className="left-1">
                                 <h3>{this.state.kpi}, by templates</h3>
                                     <div className="box-3">
                                     <ResponsiveContainer height={230}>
@@ -1411,6 +1513,17 @@ export default class Boss_Start extends Component {
                                     </ResponsiveContainer>
                                     </div>
                                 </div>
+                                <div className="left-1">
+                                <h3>{this.state.kpi}, Distribution</h3>
+                                    <div className="box-3">
+                                    <ResponsiveContainer height={230}>
+                                        <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>
+                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>
+                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/>
+                                        </RadialBarChart>
+                                    </ResponsiveContainer>
+                                    </div>
+                                </div>                                
                             </Col>
                         </Row>
 
