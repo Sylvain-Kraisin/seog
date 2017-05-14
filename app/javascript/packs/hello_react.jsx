@@ -13,7 +13,7 @@ import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table 
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
 import techguy from './assets/images/tech.jpeg'
-import teacherguy from './assets/images/teacher.jpeg.png'
+import teacherguy from './assets/images/teacher.jpeg'
 import bossguy from './assets/images/boss.jpeg'
 import marketgirl from './assets/images/marketing.jpeg'
 
@@ -205,7 +205,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[0],
         avg_unicity: ini_blog.avg_unicity[0],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[0],
-        
+
         fill: '#8884d8'
 
     },
@@ -258,7 +258,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[1],
         avg_unicity: ini_blog.avg_unicity[1],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[1],
-        
+
         fill: '#83a6ed'
 
     },
@@ -311,7 +311,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[2],
         avg_unicity: ini_blog.avg_unicity[2],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[2],
-        
+
         fill: '#8dd1e1'
 
     },
@@ -364,7 +364,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[3],
         avg_unicity: ini_blog.avg_unicity[3],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[3],
-        
+
         fill: '#d0ed57'
 
     },
@@ -417,7 +417,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[4],
         avg_unicity: ini_blog.avg_unicity[4],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[4],
-        
+
         fill: '#ffc658'
 
     }
@@ -1125,9 +1125,9 @@ export default class Boss_Start extends Component {
 
         avg_depthData.push(Math.round(10*(segData[0].avg_depth * segData[0].comp_pages + segData[1].avg_depth * segData[1].comp_pages + segData[2].avg_depth * segData[2].comp_pages + segData[3].avg_depth * segData[3].comp_pages + segData[4].avg_depth * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10);
 
-        
+
         avg_loadtimesData.push(Math.round((segData[0].avg_loadtimes * segData[0].comp_pages + segData[1].avg_loadtimes * segData[1].comp_pages + segData[2].avg_loadtimes * segData[2].comp_pages + segData[3].avg_loadtimes * segData[3].comp_pages + segData[4].avg_loadtimes * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)));
-        
+
         console.log("avg_loadtimesData");
         console.log(avg_loadtimesData);
 
@@ -1361,7 +1361,7 @@ export default class Boss_Start extends Component {
 
                         <Row className="show-grid">
                         <Col md={12} lg={6}>
-                            
+
                            <div className="kpis-selection">
                               <Tab.Container id="kpis-tab" defaultActiveKey="one">
                                 <Row className="clearfix">
@@ -1386,7 +1386,7 @@ export default class Boss_Start extends Component {
                                               <Button bsStyle="default" bsSize="large" className="kpibut-3" onClick={event => this.displayEVO(event,'Active Ratio', 'active_ratio_oncomp', this.state.evoData[week-1].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Ratio</Button>
                                               <Button bsStyle="default" bsSize="large" className="kpibut-3"></Button>
                                             </ButtonToolbar>
-                                            
+
                                       </Tab.Pane>
                                       <Tab.Pane eventKey="two">
                                             <ButtonToolbar className="kpis-tab">
@@ -1523,7 +1523,7 @@ export default class Boss_Start extends Component {
                                         </RadialBarChart>
                                     </ResponsiveContainer>
                                     </div>
-                                </div>                                
+                                </div>
                             </Col>
                         </Row>
 
