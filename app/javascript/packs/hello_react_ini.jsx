@@ -13,7 +13,7 @@ import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table 
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
 import techguy from './assets/images/tech.jpeg'
-import teacherguy from './assets/images/teacher.jpeg'
+import teacherguy from './assets/images/teacher.jpeg.png'
 import bossguy from './assets/images/boss.jpeg'
 import marketgirl from './assets/images/marketing.jpeg'
 
@@ -206,7 +206,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[0],
         avg_unicity: ini_blog.avg_unicity[0],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[0],
-
+        
         fill: '#8884d8'
 
     },
@@ -259,7 +259,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[1],
         avg_unicity: ini_blog.avg_unicity[1],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[1],
-
+        
         fill: '#83a6ed'
 
     },
@@ -312,7 +312,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[2],
         avg_unicity: ini_blog.avg_unicity[2],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[2],
-
+        
         fill: '#8dd1e1'
 
     },
@@ -365,7 +365,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[3],
         avg_unicity: ini_blog.avg_unicity[3],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[3],
-
+        
         fill: '#d0ed57'
 
     },
@@ -418,7 +418,7 @@ var segData = [
         avg_words: ini_blog.avg_Words[4],
         avg_unicity: ini_blog.avg_unicity[4],
         avg_AnchorsVar: ini_blog.avg_AnchorsVar[4],
-
+        
         fill: '#ffc658'
 
     }
@@ -746,9 +746,9 @@ function nextWeek(curweek) {
 
         avg_depthData.push(Math.round(10*(segData[0].avg_depth * segData[0].comp_pages + segData[1].avg_depth * segData[1].comp_pages + segData[2].avg_depth * segData[2].comp_pages + segData[3].avg_depth * segData[3].comp_pages + segData[4].avg_depth * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10);
 
-
+        
         avg_loadtimesData.push(Math.round((segData[0].avg_loadtimes * segData[0].comp_pages + segData[1].avg_loadtimes * segData[1].comp_pages + segData[2].avg_loadtimes * segData[2].comp_pages + segData[3].avg_loadtimes * segData[3].comp_pages + segData[4].avg_loadtimes * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)));
-
+        
         console.log("avg_loadtimesData");
         console.log(avg_loadtimesData);
 
@@ -877,8 +877,7 @@ const kpiTextData = {
             todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
         },
 
-
-        visits_byAP: {
+        visits_byAP_comp: {
             def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
             impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
             todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
@@ -1422,7 +1421,7 @@ export default class Boss_Start extends Component {
                                     
                                     <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Active Pages','active_pages', this.state.evoData[week].active_pages, this.evoDiff(evoData, this.state.week, "active_pages"), kpiTextData.active_pages.def, kpiTextData.active_pages.todo)}>Active Pages</Button>
                                     
-                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits by Active Page', 'visits_byAP', this.state.evoData[week].visits_byAP, this.evoDiff(evoData, this.state.week, "visits_byAP"),kpiTextData.visits_byAP.def, kpiTextData.visits_byAP.todo)}>Visits by AP</Button>
+                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Visits by AP</Button>
                                 </ButtonToolbar>                              
                             </div>                            
                         </Row>
@@ -1951,24 +1950,18 @@ export default class Boss_Start extends Component {
                            <div className="kpis-selection">
                                 <ButtonToolbar className="kpis-tab">
                                   <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Indexable Pages', 'comp_pages', this.state.evoData[week].comp_pages, this.evoDiff(evoData, this.state.week, "comp_pages"),kpiTextData.comp_pages.def, kpiTextData.comp_pages.todo)}>Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Index. Pages', 'crawled_comp_pages', this.state.evoData[week].crawled_comp_pages, this.evoDiff(evoData, this.state.week, "crawled_comp_pages"),kpiTextData.crawled_comp_pages.def, kpiTextData.crawled_comp_pages.todo)}>Crawled Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Index. Pages', 'active_comp_pages', this.state.evoData[week].active_comp_pages, this.evoDiff(evoData, this.state.week, "active_comp_pages"),kpiTextData.active_comp_pages.def, kpiTextData.active_comp_pages.todo)}>Active Indexable</Button>                                 
+                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Index. Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawled Indexable</Button>
+                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Index. Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Indexable</Button>                                 
                                 </ButtonToolbar>
-                                
                                 <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Not Indexable Pages', 'notcomp_pages', this.state.evoData[week].notcomp_pages, this.evoDiff(evoData, this.state.week, "notcomp_pages"),kpiTextData.notcomp_pages.def, kpiTextData.notcomp_pages.todo)}>Not Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Not Index. Pages', 'crawled_notcomp_pages', this.state.evoData[week].crawled_notcomp_pages, this.evoDiff(evoData, this.state.week, "crawled_notcomp_pages"),kpiTextData.crawled_notcomp_pages.def, kpiTextData.crawled_notcomp_pages.todo)}>Crawled Not Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Not Index. Pages', 'active_notcomp_pages', this.state.evoData[week].active_notcomp_pages, this.evoDiff(evoData, this.state.week, "active_notcomp_pages"),kpiTextData.active_notcomp_pages.def, kpiTextData.active_notcomp_pages.todo)}>Active Not Indexable</Button>
+                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Not Indexable Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Not Indexable</Button>
+                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Not Index. Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawled Not Indexable</Button>
+                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Not Index. Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Not Indexable</Button>
                                 </ButtonToolbar>                           
                             </div>                            
                         </Row>
 
                         <Row className="show-grid">
-
                             <Col md={12} lg={6}>
                                 <div className="left-1">
                                     <Row className="col-1">
@@ -2362,7 +2355,6 @@ export default class Boss_Start extends Component {
                                     </tbody>
                                 </Table>
                             </Col>
-
                       </Row>
              
              
@@ -2376,7 +2368,7 @@ export default class Boss_Start extends Component {
                 
                 
                 
-            
+               
                 <Tab.Pane eventKey="third" >
     <h2>SEO Marketing Tasks<br/></h2>
                         <Row className="show-grid">

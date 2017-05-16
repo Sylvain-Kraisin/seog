@@ -24,10 +24,23 @@
 // Raleway and Cabin
 body {
     font-family: sans-serif;
+    background: #fefefe;
+}
+
+.maincontent {
+    background: #cee3ed;
 }
 
 *:focus {
     outline: none !important;
+}
+
+.btn-default {
+    background-image: none;
+}
+
+.top-div {
+    padding-top: 8px;
 }
 
 .top-div,
@@ -42,29 +55,33 @@ body {
 }
 
 .logo {
-    background: #000;
+    background: #fefefe;
     margin: 0;
     height: 60px;
     min-width: 140px;
+    border-bottom: 4px solid rgba(0, 0, 0, 0.3);
+    
 }
 
 .logo h1 {
-    color: #FFF;
-    font-size: 2.5em;
+    color: #000;
+    font-size: 3.2em;
     vertical-align: middle;
+    letter-spacing: -3px;
     text-align: left;
     padding-left: 20px;
-    line-height: 1.8;
+    line-height: 1.1em;
     margin: 0;
-    font-family: 'Raleway', Arial, sans-serif;
-    font-weight: 600;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bolder;
+    white-space: nowrap;
 }
 
 .top-bar {
-    background-color: lightgrey;
+    background-color: #fefefe;
     height: 60px;
     color: #000;
-    font-size: 3em;
+    font-size: 2em;
     display: table-cell;
     vertical-align: middle;
     text-align: center;
@@ -74,21 +91,52 @@ body {
     font-family: 'Raleway', sans-serif;
     font-weight: 400;
     padding-right: 40px;
+    border-bottom: 4px solid rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .sidebar {
+    overflow: hidden;
     padding-right: 0;
-    background-color: lightgrey;
-    height: 880px;
+    background-color: #444;
     min-width: 140px;
+    margin-bottom: -5000px; /* any large number will do */
+    padding-bottom: 5000px; 
 }
 
 .barbutton {
     width: 100%;
-    padding: 18px 20px;
+    padding: 8px 20px;
     text-align: left;
-    font-family: 'Cabin', Arial, sans-serif;
-    
+    font-family: 'Raleway', Arial, sans-serif;
+    font-weight: 100;
+    white-space: normal;
+    display: inline-block;
+    color: #fefefe;
+    background-color: #333;
+    padding: 10px 30px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom-width: 3px;
+    margin-top: -3px;
+    text-shadow: 0 1px 0 #000;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.barbutton:hover {
+    background-color: #fcd1d1;
+    border-color: rgba(0,0,0,0.5);
+    text-shadow: 0 1px 0 #fff !important;
+}
+
+.barbutton:active, .barbutton:focus, .barbutton:selected {
+    background-color: #f3f3f3;
+    border-color: rgba(0,0,0,0.5);
+    text-shadow: 0 1px 0 #fff !important;
 }
 
 ul.nav {
@@ -143,7 +191,7 @@ h2 {
     padding: 22px 10px;
     text-transform: uppercase;
     text-align: center;
-    border: 2px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
 }
 
@@ -169,7 +217,7 @@ h2 {
     padding: 0;
     margin: 0;
     margin-top: 6px;
-    border: solid 2px black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-right: 0px;
 }
 
@@ -207,32 +255,34 @@ img.guyimage {
     height: 270px;
     background: #FeFeFe;
     border-radius: 0 20px 20px 0;
-    border: solid 2px black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     padding: 0;
     margin: 0;
     margin-top: 6px;
 }
 
 .box-3 {
-    height: 270px;
+    height: 268px;
     background: #FeFeFe;
-    border-radius: 0 20px 20px 0;
-    border: solid 2px black;
-    padding: 16px;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 15px;
     margin: 0;
-    margin-top: 6px;
+    margin-top: 0;
     font-family: 'Raleway', sans-serif;
+    margin-right: 2px;
 }
 
 .box-4 {
     height: 168px;
     background: #FeFeFe;
-    border-radius: 0 20px 20px 0;
-    border: solid 2px black;
-    padding: 16px;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 15px;
     margin: 0;
-    margin-top: 6px;
+    margin-top: 0;
     font-family: 'Raleway', sans-serif;
+    margin-right: 2px;
 }
 
 .left-1 h3.kpi {
@@ -240,7 +290,7 @@ img.guyimage {
     padding: 36px 20px;
     font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
-    border: 2px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     font-size: 2em;
     line-height: 1.5em;
@@ -254,13 +304,22 @@ img.guyimage {
 
 .left-1 h3,
 .panel {
-    margin: 0;
-    padding: 16px 10px;
-    text-transform: uppercase;
-    font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
-    border: 2px solid black;
-    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 2px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 0px;
+    height: 26px;
+    line-height: 26px;
+    background: #f3f3f3;
+    letter-spacing: 2px;
+    font-size: 0.9em;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 0px;
 }
 
 .left-1 h4 {
@@ -283,13 +342,77 @@ img.guyimage {
     margin-bottom: 5px;
 }
 
-.btn-toolbar>.kpibut-2, .btn-toolbar>.kpibut-2-3 {
-    width: 100%;
-    height: 40px;
+.btn-toolbar>.kpibut-2, .btn-toolbar>.kpibut-2-3{
+    width: 25%;
+    height: 45px;
     font-family: 'Raleway', Arial, sans-serif;
-    letter-spacing: 1px;
-    font-weight: bold;
+    letter-spacing: 0;
+    font-weight: 600;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    font-size: 0.9em;
+    text-transform: capitalize;
+    white-space: normal;
+	display: inline-block;
+	color: #666;
+	background-color: #fcd1d1;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding: 10px 30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+    text-shadow: 0 1px 0 #fefefe;
 }
+
+.btn-toolbar>.kpibut-22 {
+    width: 100%;
+    height: 98px;
+    font-family: 'Raleway', Arial, sans-serif;
+    letter-spacing: 0;
+    font-weight: 600;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    font-size: 1.7em;
+    text-transform: capitalize;
+    white-space: normal;
+}
+.btn-toolbar>.kpibut-23 {
+    width: 33.3%;
+    height: 45px;
+    font-family: 'Raleway', Arial, sans-serif;
+    letter-spacing: 0;
+    font-weight: 600;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    font-size: 0.9em;
+    text-transform: capitalize;
+    white-space: normal;
+	display: inline-block;
+	color: #666;
+	background-color: #fcd1d1;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding: 10px 30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+    text-shadow: 0 1px 0 #fefefe;
+}
+.btn-toolbar>.kpibut-23:hover, .btn-toolbar>.kpibut-2:hover {
+		background-color: #e3e3e3;
+		border-color: rgba(0,0,0,0.5);
+	}
+	
+.btn-toolbar>.kpibut-23:active, .btn-toolbar>.kpibut-2:active {
+		background-color: #CCC;
+		border-color: rgba(0,0,0,0.9);
+	}
+
 
 
 .btn-toolbar>.kpibut-3 {
@@ -320,15 +443,14 @@ img.guyimage {
 }
 
 .kpis-selection {
-    background: #f7b267;
     margin: 0;
-    padding: 10px;
+    padding: 20px;
+    padding-right: 15px;
     border-radius: 4px;
     font-family: 'Raleway', Arial, sans-serif;
     font-weight: 400;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border: 2px solid black;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 #kpis-tab {
@@ -403,10 +525,34 @@ h2.weektitle {
     text-transform: none;
 }
 
+.table-bordered {
+    border: 1px solid #ddd;
+    background: #fcfcfc;
+}
+
 .btn-toolbar>.nextbutton {
     width: 100%;
     font-size: 2em;
     height: 3em;
+    padding: 8px 20px;
+    text-align: center;
+    font-family: 'Raleway', Arial, sans-serif;
+    font-weight: 100;
+    white-space: normal;
+    display: inline-block;
+    color: #fefefe;
+    background-color: #265a88;
+    padding: 10px 30px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-bottom-width: 3px;
+    margin-top: -3px;
+    text-shadow: 0 1px 0 #000;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background-image: none;
 }
 
 .kpi-name {
@@ -426,14 +572,15 @@ h2.weektitle {
     float: left;
     width: 100px;
     height: 100px;
-    background: lightskyblue;
-    border: 1px solid black;
+    background: none;
+    border: 3px solid #555;
     border-radius: 4px;
     margin-top: 16px;
+    filter: saturate(30%);
 }
 
 .title-div {
-    border: 3px solid black;
+    border: 2px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     font-size: 1em;
     margin-top: 20px;
@@ -464,7 +611,7 @@ h3.kpiname {
     text-transform: uppercase;
     font-family: 'Raleway', Arial, sans-serif;
     text-align: center;
-    border: 2px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     font-size: 2em;
     line-height: 1.5em;
@@ -492,19 +639,19 @@ h3.kpievo {
     padding: 36px 20px;
     font-family: 'Raleway', Arial, sans-serif;
     text-align: left;
-    border: 2px solid black;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     font-size: 1em;
     line-height: 1.5em;
 }
 
 .bigkpi {
-    height: 158px;
-    line-height: 158px;
+    height: 138px;
+    line-height: 138px;
     text-align: center;
-    border: 2px solid black;
-    margin-top: 20px;
-    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 4px 4px;
+    background: #fefefe;
 }
 
 .bigkpitext {
@@ -517,13 +664,13 @@ h3.kpievo {
 }
 
 .smallkpi {
-    height: 126px;
-    line-height: 126px;
+    height: 138px;
+    line-height: 138px;
     text-align: center;
-    border: 2px solid black;
-    margin-top: 10px;
-    margin-right: 5px;
-    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-right: 7px;
+    border-radius: 0 0 4px 4px;
+    background: #fefefe;
 }
 
 .smallkpitext {
@@ -536,13 +683,13 @@ h3.kpievo {
 }
 
 .smallevo {
-    height: 126px;
-    line-height: 126px;
+    height: 138px;
+    line-height: 138px;
     text-align: center;
-    border: 2px solid black;
-    margin-top: 10px;
-    margin-left: 5px;
-    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-left: 7px;
+    border-radius: 0 0 4px 4px;
+    background: #fefefe;
 }
 
 .smallevotext {
@@ -554,10 +701,59 @@ h3.kpievo {
     padding: 20px;
 }
 
+.intro-kpi {
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 0px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 0px;
+    height: 26px;
+    line-height: 26px;
+    background: #f3f3f3;
+    letter-spacing: 2px;
+}
+
+.intro-kpi1 {
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 7px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 0px;
+    height: 26px;
+    line-height: 26px;
+    background: #f3f3f3;
+    letter-spacing: 2px;
+}
+
+.intro-kpi2 {
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    margin-top: 0px;
+    margin-left: 7px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 0px;
+    height: 26px;
+    line-height: 26px;
+    background: #f3f3f3;
+    letter-spacing: 2px;
+}
+
+
+.intro-kpitext {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #666;
+    
+}
+
 .def-tab {
     font-size: 1.3em;
     padding: 20px;
     font-family: 'Raleway', Arial, sans-serif;
+    background: #fefefe;
 }
 
 .def-tab-labels-kpi {
@@ -571,7 +767,7 @@ h3.kpievo {
 
 .def-tab-labels {
     padding: 10px !important;
-    width: 35%;
+    width: 30%;
     font-size: 1.2em;
     text-transform: uppercase;
     font-weight: bold;
@@ -588,4 +784,20 @@ h3.kpievo {
 .def-tab-text {
     padding: 10px !important;
     vertical-align: middle !important;
+}
+
+.col-half {
+    background:#00f;
+}
+
+.col-half-offset{
+    margin-left:4.166666667%;
+    background:#00f;
+}
+.spacediv {
+    height: 20px;
+}
+.objective-text {
+    font-size: 3em;
+    font-weight: bold;
 }
