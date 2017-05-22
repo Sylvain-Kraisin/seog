@@ -15,8 +15,21 @@ import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 //Custom Components
 //import ChartEvo from './components/ChartEvo';
 
-//Images
 
+//Import Blog Initial Values
+import {ini_blog, borne, dim, random, natevo} from './data/initial_blog';
+//Import SegData and EvoData
+import {segData_ini, segData_pie_ini, evoData_ini, segData_piepages_ini} from './data/segdata';
+
+//Import Courses Texts
+import {kpiTextData} from './data/courses_text.jsx';
+//Import Tasks Data
+import {techTasks, marketTasks} from './data/tasks';
+
+
+
+
+//Import Images
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
 import techguy from './assets/images/tech.jpeg'
@@ -33,568 +46,21 @@ const style = {
   	lineHeight: '24px'
   };
 
-
+console.log(random(0.5,1));
 
 var week = 0;
 const pastweek = 6;
 var weekLabels = ["W1"];
 
-const pagesLabels = ["Top", "Middle", "Long", "Paginations", "Useless"];
-
-const ini_blog = {
-    visits_byAP_comp: [1498, 280, 5, 1, 1],
-    visits_byAP_notcomp: [150, 28, 1, 1, 1],
-    crawl_ratio_oncomp: [100, 80, 40, 60, 50],
-    crawled_ratio_notcomp: [100, 100, 50, 100, 60],
-    comp_pages: [10, 90, 18700, 150, 0],
-    notcomp_pages: [0, 12, 450, 0, 17800],
-    avg_Inlinks: [7600, 140, 5, 2, 1],
-    avg_Depth: [1.2, 2.4, 7.0, 6.5, 8.9],
-    avg_LoadTimes: [820, 930, 1580, 970, 1210],
-    pct_DupTitles: [0, 0, 20, 10, 50],
-    avg_Words: [350, 650, 1260, 150, 250],
-    avg_unicity: [0, 0, 0, 0, 0],
-    avg_AnchorsVar: [0, 0, 0, 0, 0],
-
-    comp_to_notcomp: [1, 1.25, 0.8, 0.6, 0.8],
-    notcomp_to_badhttp: [0.2, 0.2, 0.2, 0.3, 0.3],
-    comp_to_active_comp: [1, 0.8, 0.4, 0, 0],
-    comp_to_active_notcomp: [1, 1, 0.2, 0, 0]
-};
-
-var inf = 10000000000000000000;
-
-const borne = {
-
-    visits: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    visits_byAP_comp: {min: [1000,100,1,1,1], max: [3024,541,12,1,1]},
-
-    visits_byAP_notcomp: {min: [122,11,1,1,1], max: [298,49,1,1,1]},
-
-    indexable_ratio: {min: [0, 0, 0, 0, 0, 0], max: [100, 100, 100, 100, 100]},
-    crawled_ratio_oncomp: {min: [100,83,16,5,5], max: [100,100,74,67,46]},
-    active_ratio_oncomp: {min: [100,52,5,0,0], max: [100,100,41,5,0]},
-
-    comp_pages: {min: [10,72,17654,150,0], max: [16,144,47890,1446,0]},
-    notcomp_pages: {min: [0,0,356,0,245], max: [4,45,15678,0,173595]},
-
-    crawled_comp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-    crawled_notcomp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    active_comp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-    active_notcomp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    avg_inlinks: {min: [6007,102,1,1,1], max: [14508,245,11,3,3]},
-    avg_depth: {min: [1,1.6,4.1,5,4], max: [1.6,3.2,12.3,14.5,13.3]},
-    avg_loadtimes: {min: [321,345,369,393,417], max: [1220,1330,2445,1345,1467]},
-    avg_badhttp: {min: [0,0,71,2,0,49], max: [0,8,9,3135,6,0,34719]},
-
-    pct_duptitles: {min: [0,0,0,0,39], max: [0,21,32,33,100]},
-    avg_words: {min: [299,521,455,102,103], max: [856,980,1980,304,504]},
-    avg_unicity: {min: [0, 0, 0, 0, 0, 0], max: [100, 100, 100, 100, 100]},
-    avg_AnchorsVar: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]}
-};
-
-const dim = {
-    avg_inlinks:  [2, 3, 4, 4, 4],
-    avg_depth:  [4, 4, 4, 4, 4],
-    avg_loadtimes: [5, 5, 5, 5, 5],
-    avg_badhttp: [7, 7, 7, 7, 7],
-
-    notcomp_pages: [6, 6, 6, 6, 6],
-    pct_duptitles: [3, 3, 3, 3, 3],
-    avg_words: [6, 6, 6, 6, 6],
-    avg_unicity: [6, 6, 6, 6, 6],
-    avg_AnchorsVar: [6, 6, 6, 6, 6]
-};
-
-function random(min, max) {
-    if (min < 0) {
-        return Math.round(100*(min + Math.random() * (Math.abs(min)+max)))/100;
-    }else {
-        return Math.round(100*(min + Math.random() * max))/100;
-    }
-}
-
-// Create Natural Evolution Factors for all months/weeks
-var natevo = [];
-for (var i = 0; i < 60; i++) {
-    natevo.push(
-        {
-            comp_pages: [0, random(0, 0.02), random(-0.05, 0.05), random(-0.05, 0.05), random(-0.05, 0.05)],
-            notcomp_pages: [0, random(0, 0.02), random(-0.02, 0.10), random(-0.05, 0.05), random(-0.05, 0.05)],
-
-            avg_inlinks: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.4, 0.4),random(-0.2, 0.2),random(-0.2, 0.2)],
-            avg_depth: [random(-0.25, 0.25),random(-0.25, 0.25),random(-0.5, 0.5),random(-0.5, 0.5),random(-0.5, 0.5)],
-            avg_loadtimes: [random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25)],
-            avg_badhttp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            pct_duptitles: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_words: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_unicity: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_AnchorsVar: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            crawled_ratio_oncomp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            visits_byAP_comp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            visits_byAP_notcomp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)]
-
-        }
-    );
-}
-
 console.log("natevo");
 console.log(natevo);
 
+var segData = segData_ini;
+var segData_pie = segData_pie_ini;
+var evoData = evoData_ini;
+var segData_piepages = segData_piepages_ini;
 
-var segData = [
-    {
-        name: 'Top Pages',
 
-        visits: ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100 + ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-        
-        visits_byAP: Math.round(10*(ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100 + ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100))/(Math.round(1*ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100) + Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100)))/10,
-
-        visits_comp: ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        active_pages: Math.round(1*ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100) + Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100) ,
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[0],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[0],
-
-        crawl_ratio_oncomp: ini_blog.crawl_ratio_oncomp[0],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[0],
-
-        active_ratio_oncomp: 1*ini_blog.crawl_ratio_oncomp[0],
-        active_ratio_onnotcomp: 1*ini_blog.crawled_ratio_notcomp[0],
-
-        pages: ini_blog.comp_pages[0] + ini_blog.notcomp_pages[0],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[0] / (ini_blog.comp_pages[0] + ini_blog.notcomp_pages[0]))/10,
-        comp_pages: ini_blog.comp_pages[0],
-        notcomp_pages: ini_blog.notcomp_pages[0],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        active_comp_pages: Math.round(1*ini_blog.comp_pages[0] * ini_blog.crawl_ratio_oncomp[0]/100),
-        active_notcomp_pages: Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        avg_badhttp_pages: 0 * ini_blog.notcomp_pages[0],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[0] * ini_blog.comp_pages[0],
-        avg_depth_pages: ini_blog.avg_Depth[0] * ini_blog.comp_pages[0],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[0] * ini_blog.comp_pages[0],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[0] * ini_blog.comp_pages[0],
-        avg_words_pages: ini_blog.avg_Words[0] * ini_blog.comp_pages[0],
-        avg_unicity_pages: ini_blog.avg_unicity[0] * ini_blog.comp_pages[0],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[0] * ini_blog.comp_pages[0],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[0]),
-        avg_inlinks: ini_blog.avg_Inlinks[0],
-        avg_depth: ini_blog.avg_Depth[0],
-        avg_loadtimes: ini_blog.avg_LoadTimes[0],
-
-        pct_duptitles: ini_blog.pct_DupTitles[0],
-        avg_words: ini_blog.avg_Words[0],
-        avg_unicity: ini_blog.avg_unicity[0],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[0],
-        
-        fill: '#b39ddb'
-
-    },
-    {
-        name: 'Categories',
-
-        visits: ini_blog.visits_byAP_comp[1]* 0.8 *ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100 + ini_blog.visits_byAP_notcomp[1] * Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-        
-        visits_byAP: Math.round(10*(ini_blog.visits_byAP_comp[1]* 1 *ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100 + ini_blog.visits_byAP_notcomp[1] * Math.round(1*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100))/(Math.round(1*ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100) + Math.round(1*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100)))/10,
-
-        visits_comp: ini_blog.visits_byAP_comp[1]* 0.8 *ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[1] * Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        active_pages: Math.round(0.8*ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100) + Math.round(1*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[1],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[1],
-
-        crawl_ratio_oncomp: ini_blog.crawl_ratio_oncomp[1],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[1],
-
-        active_ratio_oncomp: 0.8*ini_blog.crawl_ratio_oncomp[1],
-        active_ratio_onnotcomp: 0.3*ini_blog.crawled_ratio_notcomp[1],
-
-        pages: ini_blog.comp_pages[1] + ini_blog.notcomp_pages[1],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[1] / (ini_blog.comp_pages[1] + ini_blog.notcomp_pages[1]))/10,
-        comp_pages: ini_blog.comp_pages[1],
-        notcomp_pages: ini_blog.notcomp_pages[1],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        active_comp_pages: Math.round(0.8*ini_blog.comp_pages[1] * ini_blog.crawl_ratio_oncomp[1]/100),
-        active_notcomp_pages: Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        avg_badhttp_pages: 0.2*ini_blog.notcomp_pages[1] * ini_blog.notcomp_pages[1],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[1] * ini_blog.comp_pages[1],
-        avg_depth_pages: ini_blog.avg_Depth[1] * ini_blog.comp_pages[1],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[1] * ini_blog.comp_pages[1],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[1] * ini_blog.comp_pages[1],
-        avg_words_pages: ini_blog.avg_Words[1] * ini_blog.comp_pages[1],
-        avg_unicity_pages: ini_blog.avg_unicity[1] * ini_blog.comp_pages[1],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[1] * ini_blog.comp_pages[1],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[1]),
-        avg_inlinks: ini_blog.avg_Inlinks[1],
-        avg_depth: ini_blog.avg_Depth[1],
-        avg_loadtimes: ini_blog.avg_LoadTimes[1],
-
-        pct_duptitles: ini_blog.pct_DupTitles[1],
-        avg_words: ini_blog.avg_Words[1],
-        avg_unicity: ini_blog.avg_unicity[1],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[1],
-        
-        fill: '#9fa8da'
-
-    },
-    {
-        name: 'Articles',
-
-        visits: ini_blog.visits_byAP_comp[2]* 0.4 *ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100 + ini_blog.visits_byAP_notcomp[2] * Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-        
-        visits_byAP: Math.round(10*(ini_blog.visits_byAP_comp[2]* 1 *ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100 + ini_blog.visits_byAP_notcomp[2] * Math.round(1*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100))/(Math.round(1*ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100) + Math.round(1*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100)))/10,
-
-        visits_comp: ini_blog.visits_byAP_comp[2]* 0.4 *ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[2] * Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        active_pages: Math.round(0.4*ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100) + Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[2],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[2],
-
-        crawl_ratio_oncomp: ini_blog.crawl_ratio_oncomp[2],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[2],
-
-        active_ratio_oncomp: 0.4 *ini_blog.crawl_ratio_oncomp[2],
-        active_ratio_onnotcomp: 0.2*ini_blog.crawled_ratio_notcomp[2],
-
-        pages: ini_blog.comp_pages[2] + ini_blog.notcomp_pages[2],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[2] / (ini_blog.comp_pages[2] + ini_blog.notcomp_pages[2]))/10,
-        comp_pages: ini_blog.comp_pages[2],
-        notcomp_pages: ini_blog.notcomp_pages[2],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        active_comp_pages: Math.round(0.4*ini_blog.comp_pages[2] * ini_blog.crawl_ratio_oncomp[2]/100),
-        active_notcomp_pages: Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        avg_badhttp_pages: 0.2 * ini_blog.notcomp_pages[2],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[2] * ini_blog.comp_pages[2],
-        avg_depth_pages: ini_blog.avg_Depth[2] * ini_blog.comp_pages[2],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[2] * ini_blog.comp_pages[2],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[2] * ini_blog.comp_pages[2],
-        avg_words_pages: ini_blog.avg_Words[2] * ini_blog.comp_pages[2],
-        avg_unicity_pages: ini_blog.avg_unicity[2] * ini_blog.comp_pages[2],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[2] * ini_blog.comp_pages[2],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[2]),
-        avg_inlinks: ini_blog.avg_Inlinks[2],
-        avg_depth: ini_blog.avg_Depth[2],
-        avg_loadtimes: ini_blog.avg_LoadTimes[2],
-
-        pct_duptitles: ini_blog.pct_DupTitles[2],
-        avg_words: ini_blog.avg_Words[2],
-        avg_unicity: ini_blog.avg_unicity[2],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[2],
-        
-        fill: '#90caf9'
-
-    },
-    {
-        name: 'Paginations',
-
-        visits: ini_blog.visits_byAP_comp[3]* 0 *ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100 + ini_blog.visits_byAP_notcomp[3] * Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-        
-        visits_byAP: Math.round(10*(ini_blog.visits_byAP_comp[3]* 1 *ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100 + ini_blog.visits_byAP_notcomp[3] * Math.round(1*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100))/(Math.round(1*ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100) + Math.round(1*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100)))/10,
-
-        visits_comp: ini_blog.visits_byAP_comp[3]* 0 *ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[3] * Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        active_pages: Math.round(0*ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100) + Math.round(0*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[3],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[3],
-
-        crawl_ratio_oncomp: ini_blog.crawl_ratio_oncomp[3],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[3],
-
-        active_ratio_oncomp: 0*ini_blog.crawl_ratio_oncomp[3],
-        active_ratio_onnotcomp: 0.02*ini_blog.crawled_ratio_notcomp[3],
-
-        pages: ini_blog.comp_pages[3] + ini_blog.notcomp_pages[3],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[3] / (ini_blog.comp_pages[3] + ini_blog.notcomp_pages[3]))/10,
-        comp_pages: ini_blog.comp_pages[3],
-        notcomp_pages: ini_blog.notcomp_pages[3],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        active_comp_pages: Math.round(0*ini_blog.comp_pages[3] * ini_blog.crawl_ratio_oncomp[3]/100),
-        active_notcomp_pages: Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        avg_badhttp_pages: 0.2 * ini_blog.notcomp_pages[3],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[3] * ini_blog.comp_pages[3],
-        avg_depth_pages: ini_blog.avg_Depth[3] * ini_blog.comp_pages[3],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[3] * ini_blog.comp_pages[3],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[3] * ini_blog.comp_pages[3],
-        avg_words_pages: ini_blog.avg_Words[3] * ini_blog.comp_pages[3],
-        avg_unicity_pages: ini_blog.avg_unicity[3] * ini_blog.comp_pages[3],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[3] * ini_blog.comp_pages[3],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[3]),
-        avg_inlinks: ini_blog.avg_Inlinks[3],
-        avg_depth: ini_blog.avg_Depth[3],
-        avg_loadtimes: ini_blog.avg_LoadTimes[3],
-
-        pct_duptitles: ini_blog.pct_DupTitles[3],
-        avg_words: ini_blog.avg_Words[3],
-        avg_unicity: ini_blog.avg_unicity[3],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[3],
-        
-        fill: '#fff59d'
-
-    },
-    {
-        name: 'Useless Pages',
-
-        visits: ini_blog.visits_byAP_comp[4]* 0 *ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100 + ini_blog.visits_byAP_notcomp[4] * Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-        
-        visits_byAP: Math.round(10*(ini_blog.visits_byAP_comp[4]* 1 *ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100 + ini_blog.visits_byAP_notcomp[4] * Math.round(1*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100))/(Math.round(1*ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100) + Math.round(1*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100)))/10,
-
-        visits_comp: ini_blog.visits_byAP_comp[4]* 0 *ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[4] * Math.round(1*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        active_pages: Math.round(0*ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100) + Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[4],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[4],
-
-        crawl_ratio_oncomp: ini_blog.crawl_ratio_oncomp[4],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[4],
-
-        active_ratio_oncomp: 0*ini_blog.crawl_ratio_oncomp[4],
-        active_ratio_onnotcomp: 0*ini_blog.crawled_ratio_notcomp[4],
-
-        pages: ini_blog.comp_pages[4] + ini_blog.notcomp_pages[4],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[4] / (ini_blog.comp_pages[4] + ini_blog.notcomp_pages[4]))/10,
-        comp_pages: ini_blog.comp_pages[4],
-        notcomp_pages: ini_blog.notcomp_pages[4],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        active_comp_pages: Math.round(0*ini_blog.comp_pages[4] * ini_blog.crawl_ratio_oncomp[4]/100),
-        active_notcomp_pages: Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        avg_badhttp_pages: 0 * ini_blog.comp_pages[4],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[4] * ini_blog.comp_pages[4],
-        avg_depth_pages: ini_blog.avg_Depth[4] * ini_blog.comp_pages[4],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[4] * ini_blog.comp_pages[4],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[4] * ini_blog.comp_pages[4],
-        avg_words_pages: ini_blog.avg_Words[4] * ini_blog.comp_pages[4],
-        avg_unicity_pages: ini_blog.avg_unicity[4] * ini_blog.comp_pages[4],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[4] * ini_blog.comp_pages[4],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[4]),
-        avg_inlinks: ini_blog.avg_Inlinks[4],
-        avg_depth: ini_blog.avg_Depth[4],
-        avg_loadtimes: ini_blog.avg_LoadTimes[4],
-
-        pct_duptitles: ini_blog.pct_DupTitles[4],
-        avg_words: ini_blog.avg_Words[4],
-        avg_unicity: ini_blog.avg_unicity[4],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[4],
-        
-        fill: '#ffcc80'
-
-    }
-];
-
-var segData_pie = {
-    visits: [
-        {name: segData[0]["name"], value: segData[0]["visits"]},
-        {name: segData[1]["name"], value: segData[1]["visits"]},
-        {name: segData[2]["name"], value: segData[2]["visits"]},
-        {name: segData[3]["name"], value: segData[3]["visits"]},
-        {name: segData[4]["name"], value: segData[4]["visits"]}    
-    ],
-    pages: [
-        {name: segData[0]["name"], value: segData[0]["pages"]},
-        {name: segData[1]["name"], value: segData[1]["pages"]},
-        {name: segData[2]["name"], value: segData[2]["pages"]},
-        {name: segData[3]["name"], value: segData[3]["pages"]},
-        {name: segData[4]["name"], value: segData[4]["pages"]}    
-    ],
-    active_pages: [
-        {name: segData[0]["name"], value: segData[0]["active_pages"]},
-        {name: segData[1]["name"], value: segData[1]["active_pages"]},
-        {name: segData[2]["name"], value: segData[2]["active_pages"]},
-        {name: segData[3]["name"], value: segData[3]["active_pages"]},
-        {name: segData[4]["name"], value: segData[4]["active_pages"]}    
-    ],
-    visits_byAP: [
-        {name: segData[0]["name"], value: segData[0]["visits_byAP"]},
-        {name: segData[1]["name"], value: segData[1]["visits_byAP"]},
-        {name: segData[2]["name"], value: segData[2]["visits_byAP"]},
-        {name: segData[3]["name"], value: segData[3]["visits_byAP"]},
-        {name: segData[4]["name"], value: segData[4]["visits_byAP"]}    
-    ],
-    comp_pages: [
-        {name: segData[0]["name"], value: segData[0]["comp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["comp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["comp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["comp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["comp_pages"]}    
-    ],
-    notcomp_pages: [
-        {name: segData[0]["name"], value: segData[0]["notcomp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["notcomp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["notcomp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["notcomp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["notcomp_pages"]}    
-    ],
-    crawled_comp_pages: [
-        {name: segData[0]["name"], value: segData[0]["crawled_comp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["crawled_comp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["crawled_comp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["crawled_comp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["crawled_comp_pages"]}    
-    ],
-    crawled_notcomp_pages: [
-        {name: segData[0]["name"], value: segData[0]["crawled_notcomp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["crawled_notcomp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["crawled_notcomp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["crawled_notcomp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["crawled_notcomp_pages"]}   
-    ],
-    active_comp_pages: [
-        {name: segData[0]["name"], value: segData[0]["active_comp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["active_comp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["active_comp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["active_comp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["active_comp_pages"]}    
-    ],
-    active_notcomp_pages: [
-        {name: segData[0]["name"], value: segData[0]["active_notcomp_pages"]},
-        {name: segData[1]["name"], value: segData[1]["active_notcomp_pages"]},
-        {name: segData[2]["name"], value: segData[2]["active_notcomp_pages"]},
-        {name: segData[3]["name"], value: segData[3]["active_notcomp_pages"]},
-        {name: segData[4]["name"], value: segData[4]["active_notcomp_pages"]}    
-    ],
-    
-};
-
-
-
-var evoData = [
-    {
-        name: 'Week 1',
-
-        visits: segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits,
-
-        visits_comp: segData[0].visits_comp + segData[1].visits_comp + segData[2].visits_comp + segData[3].visits_comp + segData[4].visits_comp,
-
-        visits_notcomp: segData[0].visits_notcomp + segData[1].visits_notcomp + segData[2].visits_notcomp + segData[3].visits_notcomp + segData[4].visits_notcomp,
-
-        active_pages: segData[0].active_pages + segData[1].active_pages + segData[2].active_pages + segData[3].active_pages + segData[4].active_pages,
-
-        visits_byAP: Math.round(10*(segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits)/(segData[0].active_pages + segData[1].active_pages + segData[2].active_pages + segData[3].active_pages + segData[4].active_pages))/10,
-
-        visits_byAP_comp: Math.round(10*(segData[0].visits_byAP_comp * segData[0].comp_pages + segData[1].visits_byAP_comp * segData[1].comp_pages + segData[2].visits_byAP_comp * segData[2].comp_pages + segData[3].visits_byAP_comp * segData[3].comp_pages + segData[4].visits_byAP_comp * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        visits_byAP_notcomp: Math.round(10*(segData[0].visits_byAP_notcomp * segData[0].comp_pages + segData[1].visits_byAP_notcomp * segData[1].comp_pages + segData[2].visits_byAP_notcomp * segData[2].comp_pages + segData[3].visits_byAP_notcomp * segData[3].comp_pages + segData[4].visits_byAP_notcomp * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        crawl_ratio_oncomp: Math.round(1000*(segData[0].crawled_comp_pages + segData[1].crawled_comp_pages + segData[2].crawled_comp_pages + segData[3].crawled_comp_pages + segData[4].crawled_comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        active_ratio_onnotcomp: Math.round(1000*(segData[0].crawled_notcomp_pages + segData[1].crawled_notcomp_pages + segData[2].crawled_notcomp_pages + segData[3].crawled_notcomp_pages + segData[4].crawled_notcomp_pages)/(segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages))/10,
-
-        active_ratio_oncomp: Math.round(1000*(segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        active_ratio_onnotcomp: Math.round(1000*(segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages)/(segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages))/10,
-
-        pages: segData[0].pages + segData[1].pages + segData[2].pages + segData[3].pages + segData[4].pages,
-        indexable_ratio: Math.round(1000*(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)/(segData[0].pages + segData[1].pages + segData[2].pages + segData[3].pages + segData[4].pages))/10,
-        comp_pages: segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages,
-        notcomp_pages: segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages,
-
-        crawled_comp_pages: segData[0].crawled_comp_pages + segData[1].crawled_comp_pages + segData[2].crawled_comp_pages + segData[3].crawled_comp_pages + segData[4].crawled_comp_pages,
-        crawled_notcomp_pages: segData[0].crawled_notcomp_pages + segData[1].crawled_notcomp_pages + segData[2].crawled_notcomp_pages + segData[3].crawled_notcomp_pages + segData[4].crawled_notcomp_pages,
-
-        active_comp_pages: segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages,
-        active_notcomp_pages: segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages,
-
-        avg_badhttp_pages: 0,
-        avg_inlinks_pages: 0,
-        avg_depth_pages: 0,
-        avg_loadtimes_pages: 0,
-
-        pct_duptitles_pages: 0,
-        avg_words_pages: 0,
-        avg_unicity_pages: 0,
-        avg_AnchorsVar_pages: 0,
-
-        avg_badhttp: segData[0].avg_badhttp + segData[1].avg_badhttp + segData[2].avg_badhttp + segData[3].avg_badhttp + segData[4].avg_badhttp,
-
-        avg_inlinks: Math.round(10*(segData[0].avg_inlinks_pages + segData[1].avg_inlinks_pages + segData[2].avg_inlinks_pages + segData[3].avg_inlinks_pages + segData[4].avg_inlinks_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_depth: Math.round(10*(segData[0].avg_depth_pages + segData[1].avg_depth_pages + segData[2].avg_depth_pages + segData[3].avg_depth_pages + segData[4].avg_depth_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_loadtimes: Math.round((segData[0].avg_loadtimes_pages + segData[1].avg_loadtimes_pages + segData[2].avg_loadtimes_pages + segData[3].avg_loadtimes_pages + segData[4].avg_loadtimes_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)),
-
-        pct_duptitles: Math.round(10*(segData[0].pct_duptitles_pages + segData[1].pct_duptitles_pages + segData[2].pct_duptitles_pages + segData[3].pct_duptitles_pages + segData[4].pct_duptitles_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_words: Math.round((segData[0].avg_words_pages + segData[1].avg_words_pages + segData[2].avg_words_pages + segData[3].avg_words_pages + segData[4].avg_words_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)),
-
-        avg_unicity: Math.round(10*(segData[0].avg_unicity_pages + segData[1].avg_unicity_pages + segData[2].avg_unicity_pages + segData[3].avg_unicity_pages + segData[4].avg_unicity_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_AnchorsVar: Math.round(10*(segData[0].avg_AnchorsVar_pages + segData[1].avg_AnchorsVar_pages + segData[2].avg_AnchorsVar_pages + segData[3].avg_AnchorsVar_pages + segData[4].avg_AnchorsVar_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10
-
-    }
-];
-
-
-var segData_piepages = [{
-    comp_pages: [
-        {name: 'Indexable Pages', value: evoData[0]["comp_pages"]},
-        {name: 'Not Indexable Pages', value: evoData[0]["notcomp_pages"]}  
-    ],
-    notcomp_pages: [
-        {name: 'Indexable Pages', value: evoData[0]["comp_pages"]},
-        {name: 'Not Indexable Pages', value: evoData[0]["notcomp_pages"]}  
-    ],
-    crawled_comp_pages: [
-        {name: 'Crawled Indexable Pages', value: evoData[0]["crawled_comp_pages"]},
-        {name: 'Crawled Not Indexable Pages', value: evoData[0]["crawled_notcomp_pages"]}  
-    ],
-    crawled_notcomp_pages: [
-        {name: 'Crawled Indexable Pages', value: evoData[0]["crawled_comp_pages"]},
-        {name: 'Crawled Not Indexable Pages', value: evoData[0]["crawled_notcomp_pages"]}  
-    ],
-    active_comp_pages: [
-        {name: 'Active Indexable Pages', value: evoData[0]["active_comp_pages"]},
-        {name: 'Active Not Indexable Pages', value: evoData[0]["active_notcomp_pages"]}  
-    ],
-    active_notcomp_pages: [
-        {name: 'Active Indexable Pages', value: evoData[0]["active_comp_pages"]},
-        {name: 'Active Not Indexable Pages', value: evoData[0]["active_notcomp_pages"]}   
-    ],
-}];
 
 var allSegData = [];
 allSegData.push(segData);
@@ -641,7 +107,81 @@ var avg_unicityData = [evoData[0].avg_unicity];
 var pct_duptitlesData = [evoData[0].pct_duptitles];
 var avg_AnchorsVarData = [evoData[0].avg_AnchorsVar];
 
-function nextWeek(curweek) {
+function idExists_ApplyTechTasks(id1, id2, id3, id4, id5, tasksArray, i) {
+   
+    //FIND IF THE TASKS IDS EXISTS
+    
+    var found1 = tasksArray.some(function(el) {
+        return el.id === id1;
+    });
+    var found2 = tasksArray.some(function(el) {
+        return el.id === id2;
+    });
+    var found3 = tasksArray.some(function(el) {
+        return el.id === id3;
+    });
+    var found4 = tasksArray.some(function(el) {
+        return el.id === id4;
+    });
+    var found5 = tasksArray.some(function(el) {
+        return el.id === id5;
+    });
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF X% ON THE STRUCTURAL KPIS
+
+    if (found1) {segData[i]['avg_inlinks'] = Math.round(10*(segData[i]['avg_inlinks'] + 0.1 * segData[i]['avg_inlinks']))/10;}
+    if (found2) {segData[i]['avg_depth'] = Math.round(10*(segData[i]['avg_depth'] - 0.1 * segData[i]['avg_depth']))/10;}
+    if (found3) {segData[i]['avg_loadtimes'] = Math.round(10*(segData[i]['avg_loadtimes'] - 0.1 * segData[i]['avg_loadtimes']))/10;}
+    if (found4) {segData[i]['avg_badhttp'] = Math.round(10*(segData[i]['avg_badhttp'] - 0.1 * segData[i]['avg_badhttp']))/10;}
+    if (found5) {segData[i]['notcomp_pages'] = Math.round(10*(segData[i]['notcomp_pages'] - 0.1 * segData[i]['notcomp_pages']))/10;}
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF (X% * DIM) ON THE VISITS BY AP, AND THE CRAWL RATIO
+    
+    if (found1) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_inlinks[i]);}
+    if (found1) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_inlinks[i]);}  
+    if (found2) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_depth[i]);}    
+    if (found3) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_loadtimes[i]);}    
+    if (found4) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_badhttp[i]);}    
+    if (found5) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.notcomp_pages[i]);}
+        
+}
+
+function idExists_ApplyMarketTasks(id1, id2, id3, id4, tasksArray, i) {
+   
+    //FIND IF THE TASKS IDS EXISTS
+    
+    var found1 = tasksArray.some(function(el) {
+        return el.id === id1;
+    });
+    var found2 = tasksArray.some(function(el) {
+        return el.id === id2;
+    });
+    var found3 = tasksArray.some(function(el) {
+        return el.id === id3;
+    });
+    var found4 = tasksArray.some(function(el) {
+        return el.id === id4;
+    });
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF X% ON THE KPIS
+
+    if (found1) {segData[i]['pct_duptitles'] = Math.round(10*(segData[i]['pct_duptitles'] - 0.1 * segData[i]['pct_duptitles']))/10;}
+    if (found2) {segData[i]['avg_words'] = Math.round((segData[i]['avg_words'] + 0.1 * segData[i]['avg_words']));}
+    if (found3) {segData[i]['avg_unicity'] = Math.round(10*(segData[i]['avg_unicity'] + 0.1 * segData[i]['avg_unicity']))/10;}
+    if (found4) {segData[i]['avg_AnchorsVar'] = Math.round(10*(segData[i]['avg_AnchorsVar'] + 0.1 * segData[i]['avg_AnchorsVar']))/10;}
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF (X% * DIM) ON THE VISITS BY AP
+    
+    if (found1) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.pct_duptitles[i]);}  
+    if (found2) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_words[i]);}    
+    if (found3) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_unicity[i]);}    
+    if (found4) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_AnchorsVar[i]);}    
+
+}
+
+
+
+function nextWeek(curweek, techTasks, marketTasks) {
 
         ///////////////////////////////////////////////////
         /*
@@ -672,14 +212,12 @@ function nextWeek(curweek) {
 
 
         for (var i = 0; i < 5; i++) {
+            
+            //CALCUL DES EVOLUTIONS NATURELLES DES PAGES, STRUCTURAL KPIS, ET QUALITY KPIS
+            ////////////////////////////////////////////////////////////////////////////////////////////////
 
             segData[i]['comp_pages'] += Math.round(segData[i]['comp_pages'] * natevo[curweek].comp_pages[i]);
             segData[i]['notcomp_pages'] += Math.round(segData[i]['notcomp_pages'] * natevo[curweek].notcomp_pages[i]);
-
-            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
-            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
-
-            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
 
             ////////////////////////////////////////////////
 
@@ -694,12 +232,18 @@ function nextWeek(curweek) {
             segData[i]['avg_words'] += Math.round(segData[i]['avg_words'] * natevo[curweek].avg_words[i]);
             segData[i]['avg_unicity'] += Math.round(segData[i]['avg_unicity'] * natevo[curweek].avg_unicity[i]);
             segData[i]['avg_AnchorsVar'] += Math.round(segData[i]['avg_AnchorsVar'] * natevo[curweek].avg_AnchorsVar[i]);
-
+            
+            // BORNAGE #1 DES STRUCTURAL ET QUALITY KPIS (AVANT LES IMPACTS DES TASKS)
             ///////////////////////////////////////////////
+            
+            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
+            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
+
+            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
 
             bound(segData[i], 'avg_loadtimes', borne.avg_loadtimes.min[i], borne.avg_loadtimes.max[i]);
             bound(segData[i], 'avg_depth', borne.avg_depth.min[i], borne.avg_depth.max[i]);
-            //bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
+            bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
             bound(segData[i], 'avg_inlinks', borne.avg_inlinks.min[i], borne.avg_inlinks.max[i]);
 
             bound(segData[i], 'pct_duptitles', borne.pct_duptitles.min[i], borne.pct_duptitles.max[i]);
@@ -707,8 +251,69 @@ function nextWeek(curweek) {
             bound(segData[i], 'avg_unicity', borne.avg_unicity.min[i], borne.avg_unicity.max[i]);
             bound(segData[i], 'avg_AnchorsVar', borne.avg_AnchorsVar.min[i], borne.avg_AnchorsVar.max[i]);
 
+            
             ///////////////////////////////////////////////
+            // CALCUL DES IMPACTS DES SELECTED TASKS
+            ///////////////////////////////////////////////
+            
+            // TECHNICAL TASKS - Top Tail
+            if (i === 0) {idExists_ApplyTechTasks(1, 6, 11, 16, 21, techTasks, i);}
+            
+            // TECHNICAL TASKS - Middle Tail
+            if (i === 1) {idExists_ApplyTechTasks(2, 7, 12, 17, 22, techTasks, i);}
+            
+            // TECHNICAL TASKS - Long Tail
+            if (i === 2) {idExists_ApplyTechTasks(3, 8, 13, 18, 23, techTasks, i);}
+            
+            // TECHNICAL TASKS - Paginations
+            if (i === 3) {idExists_ApplyTechTasks(4, 9, 14, 19, 24, techTasks, i);}
+            
+            // TECHNICAL TASKS - Useless Pages
+            if (i === 4) {idExists_ApplyTechTasks(5, 10, 15, 20, 25, techTasks, i);}
+            
+            
+            // TECHNICAL TASKS - Top Tail
+            if (i === 0) {idExists_ApplyMarketTasks(1, 6, 11, 16, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Middle Tail
+            if (i === 1) {idExists_ApplyMarketTasks(2, 7, 12, 17, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Long Tail
+            if (i === 2) {idExists_ApplyMarketTasks(3, 8, 13, 18, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Paginations
+            if (i === 3) {idExists_ApplyMarketTasks(4, 9, 14, 19, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Useless Pages
+            if (i === 4) {idExists_ApplyMarketTasks(5, 10, 15, 20, marketTasks, i);}
+              
+            
+            // BORNAGE #2 DES STRUCTURAL ET QUALITY KPIS (APRÈS LES IMPACTS DES TASKS)
+            ///////////////////////////////////////////////
+            
+            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
+            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
 
+            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
+
+            bound(segData[i], 'avg_loadtimes', borne.avg_loadtimes.min[i], borne.avg_loadtimes.max[i]);
+            bound(segData[i], 'avg_depth', borne.avg_depth.min[i], borne.avg_depth.max[i]);
+            bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
+            bound(segData[i], 'avg_inlinks', borne.avg_inlinks.min[i], borne.avg_inlinks.max[i]);
+
+            bound(segData[i], 'pct_duptitles', borne.pct_duptitles.min[i], borne.pct_duptitles.max[i]);
+            bound(segData[i], 'avg_words', borne.avg_words.min[i], borne.avg_words.max[i]);
+            bound(segData[i], 'avg_unicity', borne.avg_unicity.min[i], borne.avg_unicity.max[i]);
+            bound(segData[i], 'avg_AnchorsVar', borne.avg_AnchorsVar.min[i], borne.avg_AnchorsVar.max[i]);
+            
+
+            ///////////////////////////////////////////////
+            
+            //****** A REFAIRE AVEC PRISE EN COMPTE DES TASKS !!!!!!!!!! *********
+            
+            //CALCUL DES RATIOS
+            ///////////////////////////////////////////////
+            
             segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].crawled_ratio_oncomp[i]);
             segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].avg_inlinks[i] / dim.avg_inlinks[i]);
             segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].avg_depth[i] / dim.avg_depth[i]);
@@ -772,12 +377,6 @@ function nextWeek(curweek) {
 
         console.log("YO")
         console.log(segData);
-
-        /////////////////////////////////////////////////////////
-        /*
-           APPLIQUER DES BONUS/MALUS
-        */
-        //////////////////////////////////////////////////////////
 
 
 
@@ -1067,7 +666,7 @@ console.log("week");
 console.log(week);
 
 for (var i = 0; i < pastweek + 1; i++) {
-    nextWeek(week);
+    nextWeek(week, [], []);
 }
 
 
@@ -1082,131 +681,7 @@ var activePagesSegData = [segData[0].active_pages, segData[1].active_pages, segD
 var pagesSegData = [segData[0].pages, segData[1].pages, segData[2].pages, segData[3].pages, segData[4].pages]
 */
 
-var a = (
-    <div>
-        <h1>This is a Title</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc.</p>
-    </div>
-);
 
-//var a = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.";
-var b = "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ";
-var c = "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum.";
-
-const kpiTextData = {
-        visits: {
-            def: "The number of organic visits generated in one month.",
-            impo: "Basic",
-            todo: "To increase your Visits, you need to analyze all the KPIs, and then spend credits on Marketing and Technical SEO Tasks."
-        },
-        active_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-
-        visits_byAP: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        indexable_ratio: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        active_ratio_oncomp: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        crawl_ratio_oncomp: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        pages: {
-            def: "The number of pages in your website structure. It contains both Indexable and Not Indexable Pages.",
-            todo: "Make sure you have a maximum number of Indexable Pages to generate more organic traffic."
-        },
-        comp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        notcomp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        crawled_comp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        crawled_notcomp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        active_comp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        active_notcomp_pages: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        avg_loadtimes: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        avg_depth: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        avg_badhttp: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        avg_inlinks: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-
-        avg_words: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        pct_duptitles: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        avg_unicity: {
-            def: a,
-            impo: b,
-            todo: c
-        },
-        avg_AnchorsVar: {
-            def: a,
-            impo: b,
-            todo: c
-        }
-}
 
 const bossText =  {
     start: {
@@ -1319,7 +794,7 @@ class KPIsRow extends React.Component {
             selected_kpi: 'visits'
         };
     this.setColorUp = this.setColorUp.bind(this);
-//    this.displayEVO = this.displayEVO.bind(this);
+    this.setColorDown = this.setColorDown.bind(this);
     }
 
     setColorUp(x) {
@@ -1333,8 +808,28 @@ class KPIsRow extends React.Component {
             return {color: "#ef5350"};
         }
     }
+    setColorDown(x) {
+        if (x == 0) {
+            return {color: "black"};
+        }
+        else if (x > 0) {
+            return {color: "#ef5350"};
+        }
+        else  {
+            return {color: "#66bb6a"};
+        }
+    }
     
     render() {
+        var setColor;
+        var kpi = this.props.kpi;
+        if (kpi == 'Not Indexable Pages'| kpi == 'Crawled Not Index. Pages' | kpi == 'Avg. Depth' | kpi == 'Avg. Load Times' | kpi == 'Duplicate Titles %') {
+            setColor = this.setColorDown;
+        }
+        else {
+            setColor = this.setColorUp;
+        }
+        
         return (
             <div>
                 <Row className="show-grid">
@@ -1368,7 +863,7 @@ class KPIsRow extends React.Component {
                                     <span className="intro-kpitext">{this.props.title3}</span>
                                 </div>
                                 <div className="smallevo">
-                                  <span className="smallevotext" style={this.setColorUp(this.props.kpiEvo)}>{numberWithCommasPCT(this.props.kpiEvo)}%</span>
+                                  <span className="smallevotext" style={setColor(this.props.kpiEvo)}>{numberWithCommasPCT(this.props.kpiEvo)}%</span>
                                 </div>
                             </Col>                               
                     </Col>
@@ -1679,101 +1174,7 @@ class KPIsTableLine_DOWN extends React.Component {
 //<KPIsTableLine_UP kpiName="Visits" stateWeek={this.state.week} kpiKey="visits"/>
 
 
-const techTasks = [
-    {
-        id: 1,
-        kpi: "Depth",
-        pages: "Top Pages",
-        name: "Reduce the Depth of the Top Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0    
-    }, 
-    {
-        id: 2,
-        kpi: "Depth",
-        pages: "Categories",
-        name: "Reduce the Depth of the Categories pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 3,
-        kpi: "Depth",
-        pages: "Articles",
-        name: "Reduce the Depth of the Articles pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 4,
-        kpi: "Depth",
-        pages: "Paginations",
-        name: "Reduce the Depth of the Top Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 5,
-        kpi: "Depth",
-        pages: "Useless Pages",
-        name: "Reduce the Depth of the Useless Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-];
 
-const marketTasks = [
-    {
-        id: 1,
-        kpi: "Depth",
-        pages: "Top Pages",
-        name: "Reduce the Depth of the Top Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0    
-    }, 
-    {
-        id: 2,
-        kpi: "Depth",
-        pages: "Categories",
-        name: "Reduce the Depth of the Categories pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 3,
-        kpi: "Depth",
-        pages: "Articles",
-        name: "Reduce the Depth of the Articles pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 4,
-        kpi: "Depth",
-        pages: "Paginations",
-        name: "Reduce the Depth of the Top Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-    {
-        id: 5,
-        kpi: "Depth",
-        pages: "Useless Pages",
-        name: "Reduce the Depth of the Useless Pages.",
-        credits: 2,
-        select: "Select",
-        impact: 0
-    },
-];
 
 
 var products = [{
@@ -1795,6 +1196,9 @@ var creditsMarket = 4;
 const style3 = {
 fontSize: '4em'
 };
+
+
+
 
 
 
@@ -1837,6 +1241,7 @@ export default class Boss_Start extends Component {
             creditsMarket: creditsMarket,
             tasksTech: [],
             tasksMarket: [],
+            clearTasksSelection: false,
             showModal: false
         };
         this.goToNextWeek = this.goToNextWeek.bind(this);
@@ -2014,18 +1419,26 @@ export default class Boss_Start extends Component {
 
     goToNextWeek(event) {
 
-        nextWeek(this.state.week);
+        nextWeek(this.state.week, this.state.tasksTech, this.state.tasksMarket);
+        
+        this.refs.table1.cleanSelected();
+        this.refs.table2.cleanSelected();
 
         this.setState({
             week: week,
             evoData: evoData,
             segData: segData,
-            kpiValue: evoData[this.state.week].visits,
-            segData_pie: segData_pie,
+            kpiValue: evoData[this.state.week + 1].visits,
+            //segData_pie: segData_pie.visits,
+            segData_piepages: segData_piepages[week].comp_pages,
             kpiEvo: this.evoDiff(evoData, this.state.week + 1, "visits"),
             kpi: 'Visits',
             selected_kpi: 'visits',
-            key: 'first'
+            key: 'first',
+            creditsTech: creditsTech,
+            creditsMarket: creditsMarket,
+            tasksTech: [],
+            tasksMarket: []
         });
         console.log("setColorUp(this.state.week)");
         console.log(this.state.week);
@@ -2034,19 +1447,26 @@ export default class Boss_Start extends Component {
 
     goToNextWeekTest(event) {
 
-        nextWeek(this.state.week);
+        nextWeek(this.state.week, this.state.tasksTech, this.state.tasksMarket);
+        
+        this.refs.table1.cleanSelected();
+        this.refs.table2.cleanSelected();
 
         this.setState({
             week: week,
             evoData: evoData,
             segData: segData,
-            kpiValue: evoData[this.state.week].visits,
+            kpiValue: evoData[this.state.week + 1].visits,
             //segData_pie: segData_pie.visits,
             segData_piepages: segData_piepages[week].comp_pages,
             kpiEvo: this.evoDiff(evoData, this.state.week + 1, "visits"),
             kpi: 'Visits',
             selected_kpi: 'visits',
-            key: 'first'
+            key: 'first',
+            creditsTech: creditsTech,
+            creditsMarket: creditsMarket,
+            tasksTech: [],
+            tasksMarket: []
         });
         console.log("setColorUp(this.state.week)");
         console.log(this.state.week);
@@ -2183,6 +1603,7 @@ export default class Boss_Start extends Component {
         var credits = this.state.creditsMarket;
         var tasks = this.state.tasksMarket;
         
+        
         if (isSelected) {
             
             if (credits - row.credits >= 0) {
@@ -2247,7 +1668,7 @@ export default class Boss_Start extends Component {
         
     const selectRowProp = {
         mode: 'checkbox',
-        bgColor: 'pink',
+        bgColor: '#fcd1d1',
         clickToSelect: true,
         onSelect: this.onRowSelectTech,
         onSelectAll: this.onSelectAll
@@ -2255,7 +1676,7 @@ export default class Boss_Start extends Component {
     
     const selectRowProp2 = {
         mode: 'checkbox',
-        bgColor: 'pink',
+        bgColor: '#fcd1d1',
         clickToSelect: true,
         onSelect: this.onRowSelectMarket,
         onSelectAll: this.onSelectAll
@@ -2834,7 +2255,7 @@ export default class Boss_Start extends Component {
                                         </ButtonToolbar>
                                     </Col>
                                 </Row>
-                                <BootstrapTable data={techTasks} selectRow={ selectRowProp } striped hover>
+                                <BootstrapTable ref='table1' data={techTasks} selectRow={ selectRowProp } striped hover>
                                   <TableHeaderColumn isKey dataField='id' width="7%" dataSort={ true }>#</TableHeaderColumn>
                                   <TableHeaderColumn dataField='kpi' width="17%" dataSort={ true }>KPIs</TableHeaderColumn>
                                   <TableHeaderColumn dataField='pages' width="17%" dataSort={ true }>Pages</TableHeaderColumn>
@@ -2888,7 +2309,7 @@ export default class Boss_Start extends Component {
                                         </ButtonToolbar>
                                     </Col>
                                 </Row>
-                                <BootstrapTable data={marketTasks} selectRow={ selectRowProp2 } striped hover>
+                                <BootstrapTable ref='table2' data={marketTasks} selectRow={ selectRowProp2 } striped hover>
                                   <TableHeaderColumn isKey dataField='id' width="7%" dataSort={ true }>#</TableHeaderColumn>
                                   <TableHeaderColumn dataField='kpi' width="17%" dataSort={ true }>KPIs</TableHeaderColumn>
                                   <TableHeaderColumn dataField='pages' width="17%" dataSort={ true }>Pages</TableHeaderColumn>
@@ -2921,10 +2342,12 @@ export default class Boss_Start extends Component {
                     </Tab.Pane>
                     
                     <Tab.Pane eventKey="fith">
-                        <h2 className="weektitle">You have 5 Credits left to spend this month on Marketing or Technical Tasks.<br/><br/>Are you sure you want to go to the next week?<br/><br/></h2>
+                        <h2 className="weektitle">You have {this.state.creditsTech + this.state.creditsMarket} Credits left to spend this week on Marketing or Technical Tasks.<br/><br/>Are you sure you want to go to the next week?<br/><br/></h2>
                         <ButtonToolbar>
-                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeek(event)} >Go To The Next Week!</Button>
+                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeek(event)} >Yes, Go To The Next Week!</Button>
                         </ButtonToolbar>
+                        
+                        <div className="spacediv-week"></div>
                     </Tab.Pane>
                 </Tab.Content>
             </Col>
