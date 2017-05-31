@@ -403,6 +403,32 @@ img.guyimage {
 	border-bottom-width: 3px;
     text-shadow: 0 1px 0 #fefefe;
 }
+
+.btn-toolbar>.kpibut-24 {
+    width: 100%;
+    height: 165px;
+    font-family: 'Raleway', Arial, sans-serif;
+    letter-spacing: 0;
+    font-weight: 600;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    font-size: 2em;
+    text-transform: capitalize;
+    white-space: normal;
+	display: inline-block;
+	color: #666;
+	background-color: #fcd1d1;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding: 10px 30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+    text-shadow: 0 1px 0 #fefefe;
+}
+
 .btn-toolbar>.kpibut-23:hover, .btn-toolbar>.kpibut-2:hover {
 		background-color: #e3e3e3;
 		border-color: rgba(0,0,0,0.5);
@@ -523,11 +549,16 @@ img.guyimage {
 h2.weektitle {
     border: none;
     text-transform: none;
+    font-size: 3em;
 }
 
 .table-bordered {
     border: 1px solid #ddd;
     background: #fcfcfc;
+}
+
+.table {
+    margin-bottom: 0;
 }
 
 .btn-toolbar>.nextbutton {
@@ -586,7 +617,7 @@ h2.weektitle {
     margin-top: 20px;
     font-family: 'Raleway', Arial, sans-serif;
     padding-left: 20px;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     background: #e0e0e0;
 }
 
@@ -596,11 +627,13 @@ h2.weektitle {
     font-weight: bolder;
     margin-left: 100px;
     line-height: 0.8em;
+    letter-spacing: -1px;
 }
 .title-p {
-    font-size: 1.7em;
+    font-size: 1.6em;
     padding-left: 20px;
     margin-left: 100px;
+    line-height: 1.4em;
 }
 
 
@@ -797,7 +830,42 @@ h3.kpievo {
 .spacediv {
     height: 20px;
 }
+
+.spacediv-week {
+    height: 300px;
+}
 .objective-text {
     font-size: 3em;
     font-weight: bold;
+}
+
+
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+    box-shadow: none;
+    width: 100%;
+    background: none;
+    border: none;
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 1px 0px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    font-size: 1em;
 }

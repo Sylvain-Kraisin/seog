@@ -6,29 +6,39 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar, RadialBarChart, RadialBar} from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar, RadialBarChart, RadialBar, PieChart, Pie, Sector, Cell} from 'recharts'
 //import ReactFitText from 'react-fittext'
-import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table } from 'react-bootstrap'
+import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table, Modal} from 'react-bootstrap'
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
+//Custom Components
+//import ChartEvo from './components/ChartEvo';
+
+
+//Import Blog Initial Values
+import {ini_blog, borne, dim, random, natevo} from './data/initial_blog';
+//Import SegData and EvoData
+import {segData_ini, segData_pie_ini, evoData_ini, segData_piepages_ini} from './data/segdata';
+
+//Import Courses Texts
+import {kpiTextData} from './data/courses_text.jsx';
+//Import Tasks Data
+import {techTasks, marketTasks} from './data/tasks';
+
+
+
+
+//Import Images
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
 import techguy from './assets/images/tech.jpeg'
 import teacherguy from './assets/images/teacher.jpeg'
 import bossguy from './assets/images/boss.jpeg'
-import marketgirl from './assets/images/marketing.jpeg'
+import marketinggirl from './assets/images/marketing.jpeg'
 
-//EXAMPLES
-// const Hello = props => (
-//   <div>Hello {props.name}!</div>
-// )
 
-// Hello.defaultProps = {
-//   name: 'David'
-// }
-//
-// Hello.propTypes = {
-//   name: React.PropTypes.string
-// }
+
 
 const style = {
     top: 165,
@@ -36,462 +46,19 @@ const style = {
   	lineHeight: '24px'
   };
 
-const datapie = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200},
-                  {name: 'Group E', value: 278}, {name: 'Group F', value: 189}];
-
-var Toto = "je suis toto 34"
-console.log(Toto)
+console.log(random(0.5,1));
 
 var week = 0;
 const pastweek = 6;
 var weekLabels = ["W1"];
 
-const pagesLabels = ["Top", "Middle", "Long", "Paginations", "Useless"];
-
-const ini_blog = {
-    visits_byAP_comp: [1498, 280, 5, 1, 1],
-    visits_byAP_notcomp: [150, 28, 1, 1, 1],
-    crawled_ratio_comp: [100, 80, 40, 60, 50],
-    crawled_ratio_notcomp: [100, 100, 50, 100, 60],
-    comp_pages: [10, 90, 18700, 150, 0],
-    notcomp_pages: [0, 12, 450, 0, 17800],
-    avg_Inlinks: [7600, 140, 5, 2, 1],
-    avg_Depth: [1.2, 2.4, 7.0, 6.5, 8.9],
-    avg_LoadTimes: [820, 930, 1580, 970, 1210],
-    pct_DupTitles: [0, 0, 20, 10, 50],
-    avg_Words: [350, 650, 1260, 150, 250],
-    avg_unicity: [0, 0, 0, 0, 0],
-    avg_AnchorsVar: [0, 0, 0, 0, 0],
-
-    comp_to_notcomp: [1, 1.25, 0.8, 0.6, 0.8],
-    notcomp_to_badhttp: [0.2, 0.2, 0.2, 0.3, 0.3],
-    comp_to_active_comp: [1, 0.8, 0.4, 0, 0],
-    comp_to_active_notcomp: [1, 1, 0.2, 0, 0]
-};
-
-var inf = 10000000000000000000;
-
-const borne = {
-
-    visits: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    visits_byAP_comp: {min: [1000,100,1,1,1], max: [3024,541,12,1,1]},
-
-    visits_byAP_notcomp: {min: [122,11,1,1,1], max: [298,49,1,1,1]},
-
-    indexable_ratio: {min: [0, 0, 0, 0, 0, 0], max: [100, 100, 100, 100, 100]},
-    crawled_ratio_oncomp: {min: [100,83,16,5,5], max: [100,100,74,67,46]},
-    active_ratio_oncomp: {min: [100,52,5,0,0], max: [100,100,41,5,0]},
-
-    comp_pages: {min: [10,72,17654,150,0], max: [16,144,47890,1446,0]},
-    notcomp_pages: {min: [0,0,356,0,245], max: [4,45,15678,0,173595]},
-
-    crawled_comp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-    crawled_notcomp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    active_comp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-    active_notcomp_pages: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]},
-
-    avg_inlinks: {min: [6007,102,1,1,1], max: [14508,245,11,3,3]},
-    avg_depth: {min: [1,1.6,4.1,5,4], max: [1.6,3.2,12.3,14.5,13.3]},
-    avg_loadtimes: {min: [321,345,369,393,417], max: [1220,1330,2445,1345,1467]},
-    avg_badhttp: {min: [0,0,71,2,0,49], max: [0,8,9,3135,6,0,34719]},
-
-    pct_duptitles: {min: [0,0,0,0,39], max: [0,21,32,33,100]},
-    avg_words: {min: [299,521,455,102,103], max: [856,980,1980,304,504]},
-    avg_unicity: {min: [0, 0, 0, 0, 0, 0], max: [100, 100, 100, 100, 100]},
-    avg_AnchorsVar: {min: [0, 0, 0, 0, 0, 0], max: [inf, inf, inf, inf, inf]}
-};
-
-const dim = {
-    avg_inlinks:  [2, 3, 4, 4, 4],
-    avg_depth:  [4, 4, 4, 4, 4],
-    avg_loadtimes: [5, 5, 5, 5, 5],
-    avg_badhttp: [7, 7, 7, 7, 7],
-
-    notcomp_pages: [6, 6, 6, 6, 6],
-    pct_duptitles: [3, 3, 3, 3, 3],
-    avg_words: [6, 6, 6, 6, 6],
-    avg_unicity: [6, 6, 6, 6, 6],
-    avg_AnchorsVar: [6, 6, 6, 6, 6]
-};
-
-function random(min, max) {
-    if (min < 0) {
-        return Math.round(100*(min + Math.random() * (Math.abs(min)+max)))/100;
-    }else {
-        return Math.round(100*(min + Math.random() * max))/100;
-    }
-}
-
-// Create Natural Evolution Factors for all months/weeks
-var natevo = [];
-for (var i = 0; i < 60; i++) {
-    natevo.push(
-        {
-            comp_pages: [0, random(0, 0.02), random(-0.05, 0.05), random(-0.05, 0.05), random(-0.05, 0.05)],
-            notcomp_pages: [0, random(0, 0.02), random(-0.02, 0.10), random(-0.05, 0.05), random(-0.05, 0.05)],
-
-            avg_inlinks: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.4, 0.4),random(-0.2, 0.2),random(-0.2, 0.2)],
-            avg_depth: [random(-0.25, 0.25),random(-0.25, 0.25),random(-0.5, 0.5),random(-0.5, 0.5),random(-0.5, 0.5)],
-            avg_loadtimes: [random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25),random(-0.25, 0.25)],
-            avg_badhttp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            pct_duptitles: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_words: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_unicity: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            avg_AnchorsVar: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            crawled_ratio_oncomp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-
-            visits_byAP_comp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)],
-            visits_byAP_notcomp: [random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05),random(-0.05, 0.05)]
-
-        }
-    );
-}
-
 console.log("natevo");
 console.log(natevo);
 
-
-var segData = [
-    {
-        name: 'Top Pages',
-
-        visits: ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100 + ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        visits_comp: ini_blog.visits_byAP_comp[0]* 1 *ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[0] * Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        active_pages: Math.round(1*ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100) + Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100) ,
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[0],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[0],
-
-        crawled_ratio_comp: ini_blog.crawled_ratio_comp[0],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[0],
-
-        active_ratio_oncomp: 1*ini_blog.crawled_ratio_comp[0],
-        active_ratio_onnotcomp: 1*ini_blog.crawled_ratio_notcomp[0],
-
-        pages: ini_blog.comp_pages[0] + ini_blog.notcomp_pages[0],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[0] / (ini_blog.comp_pages[0] + ini_blog.notcomp_pages[0]))/10,
-        comp_pages: ini_blog.comp_pages[0],
-        notcomp_pages: ini_blog.notcomp_pages[0],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        active_comp_pages: Math.round(1*ini_blog.comp_pages[0] * ini_blog.crawled_ratio_comp[0]/100),
-        active_notcomp_pages: Math.round(1*ini_blog.notcomp_pages[0] * ini_blog.crawled_ratio_notcomp[0]/100),
-
-        avg_badhttp_pages: 0 * ini_blog.notcomp_pages[0],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[0] * ini_blog.comp_pages[0],
-        avg_depth_pages: ini_blog.avg_Depth[0] * ini_blog.comp_pages[0],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[0] * ini_blog.comp_pages[0],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[0] * ini_blog.comp_pages[0],
-        avg_words_pages: ini_blog.avg_Words[0] * ini_blog.comp_pages[0],
-        avg_unicity_pages: ini_blog.avg_unicity[0] * ini_blog.comp_pages[0],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[0] * ini_blog.comp_pages[0],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[0]),
-        avg_inlinks: ini_blog.avg_Inlinks[0],
-        avg_depth: ini_blog.avg_Depth[0],
-        avg_loadtimes: ini_blog.avg_LoadTimes[0],
-
-        pct_duptitles: ini_blog.pct_DupTitles[0],
-        avg_words: ini_blog.avg_Words[0],
-        avg_unicity: ini_blog.avg_unicity[0],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[0],
-
-        fill: '#8884d8'
-
-    },
-    {
-        name: 'Categories',
-
-        visits: ini_blog.visits_byAP_comp[1]* 0.8 *ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100 + ini_blog.visits_byAP_notcomp[1] * Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        visits_comp: ini_blog.visits_byAP_comp[1]* 0.8 *ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[1] * Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        active_pages: Math.round(0.8*ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100) + Math.round(1*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[1],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[1],
-
-        crawled_ratio_comp: ini_blog.crawled_ratio_comp[1],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[1],
-
-        active_ratio_oncomp: 0.8*ini_blog.crawled_ratio_comp[1],
-        active_ratio_onnotcomp: 0.3*ini_blog.crawled_ratio_notcomp[1],
-
-        pages: ini_blog.comp_pages[1] + ini_blog.notcomp_pages[1],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[1] / (ini_blog.comp_pages[1] + ini_blog.notcomp_pages[1]))/10,
-        comp_pages: ini_blog.comp_pages[1],
-        notcomp_pages: ini_blog.notcomp_pages[1],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        active_comp_pages: Math.round(0.8*ini_blog.comp_pages[1] * ini_blog.crawled_ratio_comp[1]/100),
-        active_notcomp_pages: Math.round(0.3*ini_blog.notcomp_pages[1] * ini_blog.crawled_ratio_notcomp[1]/100),
-
-        avg_badhttp_pages: 0.2*ini_blog.notcomp_pages[1] * ini_blog.notcomp_pages[1],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[1] * ini_blog.comp_pages[1],
-        avg_depth_pages: ini_blog.avg_Depth[1] * ini_blog.comp_pages[1],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[1] * ini_blog.comp_pages[1],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[1] * ini_blog.comp_pages[1],
-        avg_words_pages: ini_blog.avg_Words[1] * ini_blog.comp_pages[1],
-        avg_unicity_pages: ini_blog.avg_unicity[1] * ini_blog.comp_pages[1],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[1] * ini_blog.comp_pages[1],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[1]),
-        avg_inlinks: ini_blog.avg_Inlinks[1],
-        avg_depth: ini_blog.avg_Depth[1],
-        avg_loadtimes: ini_blog.avg_LoadTimes[1],
-
-        pct_duptitles: ini_blog.pct_DupTitles[1],
-        avg_words: ini_blog.avg_Words[1],
-        avg_unicity: ini_blog.avg_unicity[1],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[1],
-
-        fill: '#83a6ed'
-
-    },
-    {
-        name: 'Articles',
-
-        visits: ini_blog.visits_byAP_comp[2]* 0.4 *ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100 + ini_blog.visits_byAP_notcomp[2] * Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        visits_comp: ini_blog.visits_byAP_comp[2]* 0.4 *ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[2] * Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        active_pages: Math.round(0.4*ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100) + Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[2],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[2],
-
-        crawled_ratio_comp: ini_blog.crawled_ratio_comp[2],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[2],
-
-        active_ratio_oncomp: 0.4 *ini_blog.crawled_ratio_comp[2],
-        active_ratio_onnotcomp: 0.2*ini_blog.crawled_ratio_notcomp[2],
-
-        pages: ini_blog.comp_pages[2] + ini_blog.notcomp_pages[2],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[2] / (ini_blog.comp_pages[2] + ini_blog.notcomp_pages[2]))/10,
-        comp_pages: ini_blog.comp_pages[2],
-        notcomp_pages: ini_blog.notcomp_pages[2],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        active_comp_pages: Math.round(0.4*ini_blog.comp_pages[2] * ini_blog.crawled_ratio_comp[2]/100),
-        active_notcomp_pages: Math.round(0.2*ini_blog.notcomp_pages[2] * ini_blog.crawled_ratio_notcomp[2]/100),
-
-        avg_badhttp_pages: 0.2 * ini_blog.notcomp_pages[2],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[2] * ini_blog.comp_pages[2],
-        avg_depth_pages: ini_blog.avg_Depth[2] * ini_blog.comp_pages[2],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[2] * ini_blog.comp_pages[2],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[2] * ini_blog.comp_pages[2],
-        avg_words_pages: ini_blog.avg_Words[2] * ini_blog.comp_pages[2],
-        avg_unicity_pages: ini_blog.avg_unicity[2] * ini_blog.comp_pages[2],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[2] * ini_blog.comp_pages[2],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[2]),
-        avg_inlinks: ini_blog.avg_Inlinks[2],
-        avg_depth: ini_blog.avg_Depth[2],
-        avg_loadtimes: ini_blog.avg_LoadTimes[2],
-
-        pct_duptitles: ini_blog.pct_DupTitles[2],
-        avg_words: ini_blog.avg_Words[2],
-        avg_unicity: ini_blog.avg_unicity[2],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[2],
-
-        fill: '#8dd1e1'
-
-    },
-    {
-        name: 'Paginations',
-
-        visits: ini_blog.visits_byAP_comp[3]* 0 *ini_blog.comp_pages[3] * ini_blog.crawled_ratio_comp[3]/100 + ini_blog.visits_byAP_notcomp[3] * Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        visits_comp: ini_blog.visits_byAP_comp[3]* 0 *ini_blog.comp_pages[3] * ini_blog.crawled_ratio_comp[3]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[3] * Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        active_pages: Math.round(0*ini_blog.comp_pages[3] * ini_blog.crawled_ratio_comp[3]/100) + Math.round(0*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[3],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[3],
-
-        crawled_ratio_comp: ini_blog.crawled_ratio_comp[3],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[3],
-
-        active_ratio_oncomp: 0*ini_blog.crawled_ratio_comp[3],
-        active_ratio_onnotcomp: 0.02*ini_blog.crawled_ratio_notcomp[3],
-
-        pages: ini_blog.comp_pages[3] + ini_blog.notcomp_pages[3],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[3] / (ini_blog.comp_pages[3] + ini_blog.notcomp_pages[3]))/10,
-        comp_pages: ini_blog.comp_pages[3],
-        notcomp_pages: ini_blog.notcomp_pages[3],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[3] * ini_blog.crawled_ratio_comp[3]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        active_comp_pages: Math.round(0*ini_blog.comp_pages[3] * ini_blog.crawled_ratio_comp[3]/100),
-        active_notcomp_pages: Math.round(0.02*ini_blog.notcomp_pages[3] * ini_blog.crawled_ratio_notcomp[3]/100),
-
-        avg_badhttp_pages: 0.2 * ini_blog.notcomp_pages[3],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[3] * ini_blog.comp_pages[3],
-        avg_depth_pages: ini_blog.avg_Depth[3] * ini_blog.comp_pages[3],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[3] * ini_blog.comp_pages[3],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[3] * ini_blog.comp_pages[3],
-        avg_words_pages: ini_blog.avg_Words[3] * ini_blog.comp_pages[3],
-        avg_unicity_pages: ini_blog.avg_unicity[3] * ini_blog.comp_pages[3],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[3] * ini_blog.comp_pages[3],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[3]),
-        avg_inlinks: ini_blog.avg_Inlinks[3],
-        avg_depth: ini_blog.avg_Depth[3],
-        avg_loadtimes: ini_blog.avg_LoadTimes[3],
-
-        pct_duptitles: ini_blog.pct_DupTitles[3],
-        avg_words: ini_blog.avg_Words[3],
-        avg_unicity: ini_blog.avg_unicity[3],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[3],
-
-        fill: '#d0ed57'
-
-    },
-    {
-        name: 'Useless Pages',
-
-        visits: ini_blog.visits_byAP_comp[4]* 0 *ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100 + ini_blog.visits_byAP_notcomp[4] * Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        visits_comp: ini_blog.visits_byAP_comp[4]* 0 *ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100,
-        visits_notcomp: ini_blog.visits_byAP_notcomp[4] * Math.round(1*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        active_pages: Math.round(0*ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100) + Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        visits_byAP_comp: ini_blog.visits_byAP_comp[4],
-        visits_byAP_notcomp: ini_blog.visits_byAP_notcomp[4],
-
-        crawled_ratio_comp: ini_blog.crawled_ratio_comp[4],
-        crawled_ratio_notcomp: ini_blog.crawled_ratio_notcomp[4],
-
-        active_ratio_oncomp: 0*ini_blog.crawled_ratio_comp[4],
-        active_ratio_onnotcomp: 0*ini_blog.crawled_ratio_notcomp[4],
-
-        pages: ini_blog.comp_pages[4] + ini_blog.notcomp_pages[4],
-        indexable_ratio: Math.round(1000*ini_blog.comp_pages[4] / (ini_blog.comp_pages[4] + ini_blog.notcomp_pages[4]))/10,
-        comp_pages: ini_blog.comp_pages[4],
-        notcomp_pages: ini_blog.notcomp_pages[4],
-
-        crawled_comp_pages: Math.round(ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100),
-        crawled_notcomp_pages: Math.round(ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        active_comp_pages: Math.round(0*ini_blog.comp_pages[4] * ini_blog.crawled_ratio_comp[4]/100),
-        active_notcomp_pages: Math.round(0*ini_blog.notcomp_pages[4] * ini_blog.crawled_ratio_notcomp[4]/100),
-
-        avg_badhttp_pages: 0 * ini_blog.comp_pages[4],
-        avg_inlinks_pages: ini_blog.avg_Inlinks[4] * ini_blog.comp_pages[4],
-        avg_depth_pages: ini_blog.avg_Depth[4] * ini_blog.comp_pages[4],
-        avg_loadtimes_pages: ini_blog.avg_LoadTimes[4] * ini_blog.comp_pages[4],
-
-        pct_duptitles_pages: ini_blog.pct_DupTitles[4] * ini_blog.comp_pages[4],
-        avg_words_pages: ini_blog.avg_Words[4] * ini_blog.comp_pages[4],
-        avg_unicity_pages: ini_blog.avg_unicity[4] * ini_blog.comp_pages[4],
-        avg_AnchorsVar_pages: ini_blog.avg_AnchorsVar[4] * ini_blog.comp_pages[4],
-
-        avg_badhttp: Math.round(0.2*ini_blog.notcomp_pages[4]),
-        avg_inlinks: ini_blog.avg_Inlinks[4],
-        avg_depth: ini_blog.avg_Depth[4],
-        avg_loadtimes: ini_blog.avg_LoadTimes[4],
-
-        pct_duptitles: ini_blog.pct_DupTitles[4],
-        avg_words: ini_blog.avg_Words[4],
-        avg_unicity: ini_blog.avg_unicity[4],
-        avg_AnchorsVar: ini_blog.avg_AnchorsVar[4],
-
-        fill: '#ffc658'
-
-    }
-];
-
-
-
-var evoData = [
-    {
-        name: 'Week 1',
-
-        visits: segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits,
-
-        visits_comp: segData[0].visits_comp + segData[1].visits_comp + segData[2].visits_comp + segData[3].visits_comp + segData[4].visits_comp,
-
-        visits_notcomp: segData[0].visits_notcomp + segData[1].visits_notcomp + segData[2].visits_notcomp + segData[3].visits_notcomp + segData[4].visits_notcomp,
-
-        active_pages: segData[0].active_pages + segData[1].active_pages + segData[2].active_pages + segData[3].active_pages + segData[4].active_pages,
-
-        visits_byAP: (segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits)/(segData[0].active_pages + segData[1].active_pages + segData[2].active_pages + segData[3].active_pages + segData[4].active_pages),
-
-        visits_byAP_comp: Math.round(10*(segData[0].visits_byAP_comp * segData[0].comp_pages + segData[1].visits_byAP_comp * segData[1].comp_pages + segData[2].visits_byAP_comp * segData[2].comp_pages + segData[3].visits_byAP_comp * segData[3].comp_pages + segData[4].visits_byAP_comp * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        visits_byAP_notcomp: Math.round(10*(segData[0].visits_byAP_notcomp * segData[0].comp_pages + segData[1].visits_byAP_notcomp * segData[1].comp_pages + segData[2].visits_byAP_notcomp * segData[2].comp_pages + segData[3].visits_byAP_notcomp * segData[3].comp_pages + segData[4].visits_byAP_notcomp * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        crawl_ratio_oncomp: Math.round(1000*(segData[0].crawled_comp_pages + segData[1].crawled_comp_pages + segData[2].crawled_comp_pages + segData[3].crawled_comp_pages + segData[4].crawled_comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        active_ratio_onnotcomp: Math.round(1000*(segData[0].crawled_notcomp_pages + segData[1].crawled_notcomp_pages + segData[2].crawled_notcomp_pages + segData[3].crawled_notcomp_pages + segData[4].crawled_notcomp_pages)/(segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages))/10,
-
-        active_ratio_oncomp: Math.round(1000*(segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        active_ratio_onnotcomp: Math.round(1000*(segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages)/(segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages))/10,
-
-        pages: segData[0].pages + segData[1].pages + segData[2].pages + segData[3].pages + segData[4].pages,
-        indexable_ratio: Math.round(1000*(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)/(segData[0].pages + segData[1].pages + segData[2].pages + segData[3].pages + segData[4].pages))/10,
-        comp_pages: segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages,
-        notcomp_pages: segData[0].notcomp_pages + segData[1].notcomp_pages + segData[2].notcomp_pages + segData[3].notcomp_pages + segData[4].notcomp_pages,
-
-        crawled_comp_pages: segData[0].crawled_comp_pages + segData[1].crawled_comp_pages + segData[2].crawled_comp_pages + segData[3].crawled_comp_pages + segData[4].crawled_comp_pages,
-        crawled_notcomp_pages: segData[0].crawled_notcomp_pages + segData[1].crawled_notcomp_pages + segData[2].crawled_notcomp_pages + segData[3].crawled_notcomp_pages + segData[4].crawled_notcomp_pages,
-
-        active_comp_pages: segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages,
-        active_notcomp_pages: segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages,
-
-        avg_badhttp_pages: 0,
-        avg_inlinks_pages: 0,
-        avg_depth_pages: 0,
-        avg_loadtimes_pages: 0,
-
-        pct_duptitles_pages: 0,
-        avg_words_pages: 0,
-        avg_unicity_pages: 0,
-        avg_AnchorsVar_pages: 0,
-
-        avg_badhttp: segData[0].avg_badhttp + segData[1].avg_badhttp + segData[2].avg_badhttp + segData[3].avg_badhttp + segData[4].avg_badhttp,
-
-        avg_inlinks: Math.round(10*(segData[0].avg_inlinks_pages + segData[1].avg_inlinks_pages + segData[2].avg_inlinks_pages + segData[3].avg_inlinks_pages + segData[4].avg_inlinks_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_depth: Math.round(10*(segData[0].avg_depth_pages + segData[1].avg_depth_pages + segData[2].avg_depth_pages + segData[3].avg_depth_pages + segData[4].avg_depth_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_loadtimes: Math.round((segData[0].avg_loadtimes_pages + segData[1].avg_loadtimes_pages + segData[2].avg_loadtimes_pages + segData[3].avg_loadtimes_pages + segData[4].avg_loadtimes_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)),
-
-        pct_duptitles: Math.round(10*(segData[0].pct_duptitles_pages + segData[1].pct_duptitles_pages + segData[2].pct_duptitles_pages + segData[3].pct_duptitles_pages + segData[4].pct_duptitles_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_words: Math.round((segData[0].avg_words_pages + segData[1].avg_words_pages + segData[2].avg_words_pages + segData[3].avg_words_pages + segData[4].avg_words_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)),
-
-        avg_unicity: Math.round(10*(segData[0].avg_unicity_pages + segData[1].avg_unicity_pages + segData[2].avg_unicity_pages + segData[3].avg_unicity_pages + segData[4].avg_unicity_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10,
-
-        avg_AnchorsVar: Math.round(10*(segData[0].avg_AnchorsVar_pages + segData[1].avg_AnchorsVar_pages + segData[2].avg_AnchorsVar_pages + segData[3].avg_AnchorsVar_pages + segData[4].avg_AnchorsVar_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10
-
-    }
-];
-
+var segData = segData_ini;
+var segData_pie = segData_pie_ini;
+var evoData = evoData_ini;
+var segData_piepages = segData_piepages_ini;
 
 
 
@@ -540,7 +107,81 @@ var avg_unicityData = [evoData[0].avg_unicity];
 var pct_duptitlesData = [evoData[0].pct_duptitles];
 var avg_AnchorsVarData = [evoData[0].avg_AnchorsVar];
 
-function nextWeek(curweek) {
+function idExists_ApplyTechTasks(id1, id2, id3, id4, id5, tasksArray, i) {
+   
+    //FIND IF THE TASKS IDS EXISTS
+    
+    var found1 = tasksArray.some(function(el) {
+        return el.id === id1;
+    });
+    var found2 = tasksArray.some(function(el) {
+        return el.id === id2;
+    });
+    var found3 = tasksArray.some(function(el) {
+        return el.id === id3;
+    });
+    var found4 = tasksArray.some(function(el) {
+        return el.id === id4;
+    });
+    var found5 = tasksArray.some(function(el) {
+        return el.id === id5;
+    });
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF X% ON THE STRUCTURAL KPIS
+
+    if (found1) {segData[i]['avg_inlinks'] = Math.round(10*(segData[i]['avg_inlinks'] + 0.1 * segData[i]['avg_inlinks']))/10;}
+    if (found2) {segData[i]['avg_depth'] = Math.round(10*(segData[i]['avg_depth'] - 0.1 * segData[i]['avg_depth']))/10;}
+    if (found3) {segData[i]['avg_loadtimes'] = Math.round(10*(segData[i]['avg_loadtimes'] - 0.1 * segData[i]['avg_loadtimes']))/10;}
+    if (found4) {segData[i]['avg_badhttp'] = Math.round(10*(segData[i]['avg_badhttp'] - 0.1 * segData[i]['avg_badhttp']))/10;}
+    if (found5) {segData[i]['notcomp_pages'] = Math.round(10*(segData[i]['notcomp_pages'] - 0.1 * segData[i]['notcomp_pages']))/10;}
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF (X% * DIM) ON THE VISITS BY AP, AND THE CRAWL RATIO
+    
+    if (found1) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_inlinks[i]);}
+    if (found1) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_inlinks[i]);}  
+    if (found2) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_depth[i]);}    
+    if (found3) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_loadtimes[i]);}    
+    if (found4) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.avg_badhttp[i]);}    
+    if (found5) {segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * 0.1 / dim.notcomp_pages[i]);}
+        
+}
+
+function idExists_ApplyMarketTasks(id1, id2, id3, id4, tasksArray, i) {
+   
+    //FIND IF THE TASKS IDS EXISTS
+    
+    var found1 = tasksArray.some(function(el) {
+        return el.id === id1;
+    });
+    var found2 = tasksArray.some(function(el) {
+        return el.id === id2;
+    });
+    var found3 = tasksArray.some(function(el) {
+        return el.id === id3;
+    });
+    var found4 = tasksArray.some(function(el) {
+        return el.id === id4;
+    });
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF X% ON THE KPIS
+
+    if (found1) {segData[i]['pct_duptitles'] = Math.round(10*(segData[i]['pct_duptitles'] - 0.1 * segData[i]['pct_duptitles']))/10;}
+    if (found2) {segData[i]['avg_words'] = Math.round((segData[i]['avg_words'] + 0.1 * segData[i]['avg_words']));}
+    if (found3) {segData[i]['avg_unicity'] = Math.round(10*(segData[i]['avg_unicity'] + 0.1 * segData[i]['avg_unicity']))/10;}
+    if (found4) {segData[i]['avg_AnchorsVar'] = Math.round(10*(segData[i]['avg_AnchorsVar'] + 0.1 * segData[i]['avg_AnchorsVar']))/10;}
+    
+    //IF THE TASKS IDS EXIST, ADD A VARIATION OF (X% * DIM) ON THE VISITS BY AP
+    
+    if (found1) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.pct_duptitles[i]);}  
+    if (found2) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_words[i]);}    
+    if (found3) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_unicity[i]);}    
+    if (found4) {segData[i]['visits_byAP_comp'] += Math.round(segData[i]['visits_byAP_comp'] * 0.1 / dim.avg_AnchorsVar[i]);}    
+
+}
+
+
+
+function nextWeek(curweek, techTasks, marketTasks) {
 
         ///////////////////////////////////////////////////
         /*
@@ -571,14 +212,12 @@ function nextWeek(curweek) {
 
 
         for (var i = 0; i < 5; i++) {
+            
+            //CALCUL DES EVOLUTIONS NATURELLES DES PAGES, STRUCTURAL KPIS, ET QUALITY KPIS
+            ////////////////////////////////////////////////////////////////////////////////////////////////
 
             segData[i]['comp_pages'] += Math.round(segData[i]['comp_pages'] * natevo[curweek].comp_pages[i]);
             segData[i]['notcomp_pages'] += Math.round(segData[i]['notcomp_pages'] * natevo[curweek].notcomp_pages[i]);
-
-            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
-            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
-
-            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
 
             ////////////////////////////////////////////////
 
@@ -593,12 +232,18 @@ function nextWeek(curweek) {
             segData[i]['avg_words'] += Math.round(segData[i]['avg_words'] * natevo[curweek].avg_words[i]);
             segData[i]['avg_unicity'] += Math.round(segData[i]['avg_unicity'] * natevo[curweek].avg_unicity[i]);
             segData[i]['avg_AnchorsVar'] += Math.round(segData[i]['avg_AnchorsVar'] * natevo[curweek].avg_AnchorsVar[i]);
-
+            
+            // BORNAGE #1 DES STRUCTURAL ET QUALITY KPIS (AVANT LES IMPACTS DES TASKS)
             ///////////////////////////////////////////////
+            
+            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
+            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
+
+            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
 
             bound(segData[i], 'avg_loadtimes', borne.avg_loadtimes.min[i], borne.avg_loadtimes.max[i]);
             bound(segData[i], 'avg_depth', borne.avg_depth.min[i], borne.avg_depth.max[i]);
-            //bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
+            bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
             bound(segData[i], 'avg_inlinks', borne.avg_inlinks.min[i], borne.avg_inlinks.max[i]);
 
             bound(segData[i], 'pct_duptitles', borne.pct_duptitles.min[i], borne.pct_duptitles.max[i]);
@@ -606,22 +251,83 @@ function nextWeek(curweek) {
             bound(segData[i], 'avg_unicity', borne.avg_unicity.min[i], borne.avg_unicity.max[i]);
             bound(segData[i], 'avg_AnchorsVar', borne.avg_AnchorsVar.min[i], borne.avg_AnchorsVar.max[i]);
 
+            
+            ///////////////////////////////////////////////
+            // CALCUL DES IMPACTS DES SELECTED TASKS
+            ///////////////////////////////////////////////
+            
+            // TECHNICAL TASKS - Top Tail
+            if (i === 0) {idExists_ApplyTechTasks(1, 6, 11, 16, 21, techTasks, i);}
+            
+            // TECHNICAL TASKS - Middle Tail
+            if (i === 1) {idExists_ApplyTechTasks(2, 7, 12, 17, 22, techTasks, i);}
+            
+            // TECHNICAL TASKS - Long Tail
+            if (i === 2) {idExists_ApplyTechTasks(3, 8, 13, 18, 23, techTasks, i);}
+            
+            // TECHNICAL TASKS - Paginations
+            if (i === 3) {idExists_ApplyTechTasks(4, 9, 14, 19, 24, techTasks, i);}
+            
+            // TECHNICAL TASKS - Useless Pages
+            if (i === 4) {idExists_ApplyTechTasks(5, 10, 15, 20, 25, techTasks, i);}
+            
+            
+            // TECHNICAL TASKS - Top Tail
+            if (i === 0) {idExists_ApplyMarketTasks(1, 6, 11, 16, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Middle Tail
+            if (i === 1) {idExists_ApplyMarketTasks(2, 7, 12, 17, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Long Tail
+            if (i === 2) {idExists_ApplyMarketTasks(3, 8, 13, 18, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Paginations
+            if (i === 3) {idExists_ApplyMarketTasks(4, 9, 14, 19, marketTasks, i);}
+            
+            // TECHNICAL TASKS - Useless Pages
+            if (i === 4) {idExists_ApplyMarketTasks(5, 10, 15, 20, marketTasks, i);}
+              
+            
+            // BORNAGE #2 DES STRUCTURAL ET QUALITY KPIS (APRÈS LES IMPACTS DES TASKS)
+            ///////////////////////////////////////////////
+            
+            bound(segData[i], 'comp_pages', borne.comp_pages.min[i], borne.comp_pages.max[i]);
+            bound(segData[i], 'notcomp_pages', borne.notcomp_pages.min[i], borne.notcomp_pages.max[i]);
+
+            segData[i]['pages'] = segData[i]['comp_pages'] + segData[i]['notcomp_pages'];
+
+            bound(segData[i], 'avg_loadtimes', borne.avg_loadtimes.min[i], borne.avg_loadtimes.max[i]);
+            bound(segData[i], 'avg_depth', borne.avg_depth.min[i], borne.avg_depth.max[i]);
+            bound(segData[i], 'avg_badhttp', borne.avg_badhttp.min[i], borne.avg_badhttp.max[i]);
+            bound(segData[i], 'avg_inlinks', borne.avg_inlinks.min[i], borne.avg_inlinks.max[i]);
+
+            bound(segData[i], 'pct_duptitles', borne.pct_duptitles.min[i], borne.pct_duptitles.max[i]);
+            bound(segData[i], 'avg_words', borne.avg_words.min[i], borne.avg_words.max[i]);
+            bound(segData[i], 'avg_unicity', borne.avg_unicity.min[i], borne.avg_unicity.max[i]);
+            bound(segData[i], 'avg_AnchorsVar', borne.avg_AnchorsVar.min[i], borne.avg_AnchorsVar.max[i]);
+            
+
+            ///////////////////////////////////////////////
+            
+            //****** A REFAIRE AVEC PRISE EN COMPTE DES TASKS !!!!!!!!!! *********
+            
+            //CALCUL DES RATIOS
+            ///////////////////////////////////////////////
+            
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].crawled_ratio_oncomp[i]);
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].avg_inlinks[i] / dim.avg_inlinks[i]);
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].avg_depth[i] / dim.avg_depth[i]);
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].avg_loadtimes[i] / dim.avg_loadtimes[i]);
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * ini_blog.notcomp_to_badhttp[i] / dim.avg_badhttp[i]);
+            segData[i]['crawl_ratio_oncomp'] += Math.round(segData[i]['crawl_ratio_oncomp'] * natevo[curweek].notcomp_pages[i] / dim.notcomp_pages[i]);
+
+            bound(segData[i], 'crawl_ratio_oncomp', borne.crawled_ratio_oncomp.min[i], borne.crawled_ratio_oncomp.max[i]);
+
             ///////////////////////////////////////////////
 
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * natevo[curweek].crawled_ratio_oncomp[i]);
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * natevo[curweek].avg_inlinks[i] / dim.avg_inlinks[i]);
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * natevo[curweek].avg_depth[i] / dim.avg_depth[i]);
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * natevo[curweek].avg_loadtimes[i] / dim.avg_loadtimes[i]);
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * ini_blog.notcomp_to_badhttp[i] / dim.avg_badhttp[i]);
-            segData[i]['crawled_ratio_comp'] += Math.round(segData[i]['crawled_ratio_comp'] * natevo[curweek].notcomp_pages[i] / dim.notcomp_pages[i]);
+            segData[i]['crawled_ratio_notcomp'] = Math.round(segData[i]['crawl_ratio_oncomp'] * ini_blog.comp_to_notcomp[i]) + Math.round(random(-2, 2));
 
-            bound(segData[i], 'crawled_ratio_comp', borne.crawled_ratio_oncomp.min[i], borne.crawled_ratio_oncomp.max[i]);
-
-            ///////////////////////////////////////////////
-
-            segData[i]['crawled_ratio_notcomp'] = Math.round(segData[i]['crawled_ratio_comp'] * ini_blog.comp_to_notcomp[i]) + Math.round(random(-2, 2));
-
-            segData[i]['active_ratio_oncomp'] = Math.round(segData[i]['crawled_ratio_comp'] * ini_blog.comp_to_active_comp[i]) + Math.round(random(-4, 4));
+            segData[i]['active_ratio_oncomp'] = Math.round(segData[i]['crawl_ratio_oncomp'] * ini_blog.comp_to_active_comp[i]) + Math.round(random(-4, 4));
 
             bound(segData[i], 'active_ratio_oncomp', borne.active_ratio_oncomp.min[i], borne.active_ratio_oncomp.max[i]);
 
@@ -629,7 +335,7 @@ function nextWeek(curweek) {
 
             ///////////////////////////////////////////////
 
-            segData[i]['crawled_comp_pages'] = Math.round(segData[i]['comp_pages'] * segData[i]['crawled_ratio_comp']/100);
+            segData[i]['crawled_comp_pages'] = Math.round(segData[i]['comp_pages'] * segData[i]['crawl_ratio_oncomp']/100);
             segData[i]['crawled_notcomp_pages'] = Math.round(segData[i]['notcomp_pages'] * segData[i]['crawled_ratio_notcomp']/100);
 
             ///////////////////////////////////////////////
@@ -672,12 +378,6 @@ function nextWeek(curweek) {
         console.log("YO")
         console.log(segData);
 
-        /////////////////////////////////////////////////////////
-        /*
-           APPLIQUER DES BONUS/MALUS
-        */
-        //////////////////////////////////////////////////////////
-
 
 
         /////////////////////////////////////////////////////////
@@ -688,7 +388,7 @@ function nextWeek(curweek) {
 
         for (var i = 0; i < 5; i++) {
 
-            segData[i]['crawled_comp_pages'] = Math.round(segData[i]['comp_pages'] * segData[i]['crawled_ratio_comp']/100);
+            segData[i]['crawled_comp_pages'] = Math.round(segData[i]['comp_pages'] * segData[i]['crawl_ratio_oncomp']/100);
             segData[i]['crawled_notcomp_pages'] = Math.round(segData[i]['notcomp_pages'] * segData[i]['crawled_ratio_notcomp']/100);
 
             bound(segData[i], 'crawled_comp_pages', borne.crawled_comp_pages.min[i], borne.crawled_comp_pages.max[i]);
@@ -711,6 +411,15 @@ function nextWeek(curweek) {
             segData[i]['visits'] = segData[i]['visits_comp'] + segData[i]['visits_notcomp'];
 
             bound(segData[i], 'visits', borne.visits.min[i], borne.visits.max[i]);
+            
+            if ((segData[i]['active_comp_pages'] + segData[i]['active_notcomp_pages']) > 0) {
+               segData[i]['visits_byAP'] = Math.round(10*(segData[i]['visits'])/(segData[i]['active_comp_pages'] + segData[i]['active_notcomp_pages']))/10; 
+            }
+            else {
+                segData[i]['visits_byAP'] = 0;
+            }
+            
+            
 
         }
 
@@ -720,7 +429,82 @@ function nextWeek(curweek) {
         console.log("allSegData");
         console.log(allSegData);
 
+        segData_pie = {
+            visits: [
+                {name: segData[0]["name"], value: segData[0]["visits"]},
+                {name: segData[1]["name"], value: segData[1]["visits"]},
+                {name: segData[2]["name"], value: segData[2]["visits"]},
+                {name: segData[3]["name"], value: segData[3]["visits"]},
+                {name: segData[4]["name"], value: segData[4]["visits"]}    
+            ],
+            pages: [
+                {name: segData[0]["name"], value: segData[0]["pages"]},
+                {name: segData[1]["name"], value: segData[1]["pages"]},
+                {name: segData[2]["name"], value: segData[2]["pages"]},
+                {name: segData[3]["name"], value: segData[3]["pages"]},
+                {name: segData[4]["name"], value: segData[4]["pages"]}     
+            ],
+            active_pages: [
+                {name: segData[0]["name"], value: segData[0]["active_pages"]},
+                {name: segData[1]["name"], value: segData[1]["active_pages"]},
+                {name: segData[2]["name"], value: segData[2]["active_pages"]},
+                {name: segData[3]["name"], value: segData[3]["active_pages"]},
+                {name: segData[4]["name"], value: segData[4]["active_pages"]}    
+            ],
+            visits_byAP: [
+                {name: segData[0]["name"], value: segData[0]["visits_byAP"]},
+                {name: segData[1]["name"], value: segData[1]["visits_byAP"]},
+                {name: segData[2]["name"], value: segData[2]["visits_byAP"]},
+                {name: segData[3]["name"], value: segData[3]["visits_byAP"]},
+                {name: segData[4]["name"], value: segData[4]["visits_byAP"]}    
+            ],
+            comp_pages: [
+                {name: segData[0]["name"], value: segData[0]["comp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["comp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["comp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["comp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["comp_pages"]}    
+            ],
+            notcomp_pages: [
+                {name: segData[0]["name"], value: segData[0]["notcomp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["notcomp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["notcomp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["notcomp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["notcomp_pages"]}    
+            ],
+            crawled_comp_pages: [
+                {name: segData[0]["name"], value: segData[0]["crawled_comp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["crawled_comp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["crawled_comp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["crawled_comp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["crawled_comp_pages"]}    
+            ],
+            crawled_notcomp_pages: [
+                {name: segData[0]["name"], value: segData[0]["crawled_notcomp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["crawled_notcomp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["crawled_notcomp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["crawled_notcomp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["crawled_notcomp_pages"]}   
+            ],
+            active_comp_pages: [
+                {name: segData[0]["name"], value: segData[0]["active_comp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["active_comp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["active_comp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["active_comp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["active_comp_pages"]}    
+            ],
+            active_notcomp_pages: [
+                {name: segData[0]["name"], value: segData[0]["active_notcomp_pages"]},
+                {name: segData[1]["name"], value: segData[1]["active_notcomp_pages"]},
+                {name: segData[2]["name"], value: segData[2]["active_notcomp_pages"]},
+                {name: segData[3]["name"], value: segData[3]["active_notcomp_pages"]},
+                {name: segData[4]["name"], value: segData[4]["active_notcomp_pages"]}    
+            ]
 
+        };
+    
+        console.log("segData_pie");
+        console.log(segData_pie);
 
         /////////////////////////////////////////////////////////
         /*
@@ -746,9 +530,9 @@ function nextWeek(curweek) {
 
         avg_depthData.push(Math.round(10*(segData[0].avg_depth * segData[0].comp_pages + segData[1].avg_depth * segData[1].comp_pages + segData[2].avg_depth * segData[2].comp_pages + segData[3].avg_depth * segData[3].comp_pages + segData[4].avg_depth * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10);
 
-
+        
         avg_loadtimesData.push(Math.round((segData[0].avg_loadtimes * segData[0].comp_pages + segData[1].avg_loadtimes * segData[1].comp_pages + segData[2].avg_loadtimes * segData[2].comp_pages + segData[3].avg_loadtimes * segData[3].comp_pages + segData[4].avg_loadtimes * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages)));
-
+        
         console.log("avg_loadtimesData");
         console.log(avg_loadtimesData);
 
@@ -782,8 +566,11 @@ function nextWeek(curweek) {
         console.log("visitsData");
         console.log(visitsData);
         ////////////////////////////////////////////////
-        visits_byAPData.push((segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits)/(segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages + segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages))
+        visits_byAPData.push(Math.round(10*(segData[0].visits + segData[1].visits + segData[2].visits + segData[3].visits + segData[4].visits)/(segData[0].active_comp_pages + segData[1].active_comp_pages + segData[2].active_comp_pages + segData[3].active_comp_pages + segData[4].active_comp_pages + segData[0].active_notcomp_pages + segData[1].active_notcomp_pages + segData[2].active_notcomp_pages + segData[3].active_notcomp_pages + segData[4].active_notcomp_pages))/10);
         ////////////////////////////////////////////////
+    
+        console.log("visits_byAPData");
+        console.log(visits_byAPData);
 
         visits_byAP_compData.push(Math.round(10*(segData[0].visits_byAP_comp * segData[0].comp_pages + segData[1].visits_byAP_comp * segData[1].comp_pages + segData[2].visits_byAP_comp * segData[2].comp_pages + segData[3].visits_byAP_comp * segData[3].comp_pages + segData[4].visits_byAP_comp * segData[4].comp_pages)/(segData[0].comp_pages + segData[1].comp_pages + segData[2].comp_pages + segData[3].comp_pages + segData[4].comp_pages))/10);
 
@@ -796,6 +583,7 @@ function nextWeek(curweek) {
         week = curweek + 1;
         //Create evoData (Total evolutions) Tab
         evoData = [];
+        segData_piepages = [];
         for (var i = 0; i < week + 1; i++) {
             evoData.push({
                 name: "Week " + (i - pastweek),
@@ -835,6 +623,34 @@ function nextWeek(curweek) {
                 pct_duptitles: pct_duptitlesData[i],
                 avg_AnchorsVar: avg_AnchorsVarData[i]
             });
+            
+            segData_piepages.push({
+                comp_pages: [
+                    {name: 'Indexable Pages', value: evoData[i]["comp_pages"]},
+                    {name: 'Not Indexable Pages', value: evoData[i]["notcomp_pages"]}  
+                ],
+                notcomp_pages: [
+                    {name: 'Indexable Pages', value: evoData[i]["comp_pages"]},
+                    {name: 'Not Indexable Pages', value: evoData[i]["notcomp_pages"]}  
+                ],
+                crawled_comp_pages: [
+                    {name: 'Crawled Indexable Pages', value: evoData[i]["crawled_comp_pages"]},
+                    {name: 'Crawled Not Indexable Pages', value: evoData[i]["crawled_notcomp_pages"]}  
+                ],
+                crawled_notcomp_pages: [
+                    {name: 'Crawled Indexable Pages', value: evoData[i]["crawled_comp_pages"]},
+                    {name: 'Crawled Not Indexable Pages', value: evoData[i]["crawled_notcomp_pages"]}  
+                ],
+                active_comp_pages: [
+                    {name: 'Active Indexable Pages', value: evoData[i]["active_comp_pages"]},
+                    {name: 'Active Not Indexable Pages', value: evoData[i]["active_notcomp_pages"]}  
+                ],
+                active_notcomp_pages: [
+                    {name: 'Active Indexable Pages', value: evoData[i]["active_comp_pages"]},
+                    {name: 'Active Not Indexable Pages', value: evoData[i]["active_notcomp_pages"]}   
+                ],
+            });
+            
         }
 
     }
@@ -850,7 +666,7 @@ console.log("week");
 console.log(week);
 
 for (var i = 0; i < pastweek + 1; i++) {
-    nextWeek(week);
+    nextWeek(week, [], []);
 }
 
 
@@ -865,120 +681,7 @@ var activePagesSegData = [segData[0].active_pages, segData[1].active_pages, segD
 var pagesSegData = [segData[0].pages, segData[1].pages, segData[2].pages, segData[3].pages, segData[4].pages]
 */
 
-const kpiTextData = {
-        visits: {
-            def: "The number of organic visits generated in one month.",
-            impo: "Basic",
-            todo: "To increase your Visits, you need to analyze all the KPIs, and then spend credits on Marketing and Technical SEO Tasks."
-        },
-        active_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
 
-
-        visits_byAP: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        indexable_ratio: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        active_ratio_oncomp: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        crawl_ratio_oncomp: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        pages: {
-            def: "The number of pages in your website structure. It contains both Indexable and Not Indexable Pages.",
-            todo: "Make sure you have a maximum number of Indexable Pages to generate more organic traffic."
-        },
-        comp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        notcomp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        crawled_comp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        crawled_notcomp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        active_comp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        active_notcomp_pages: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        avg_loadtimes: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        avg_depth: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        avg_badhttp: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        avg_inlinks: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-
-        avg_words: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        pct_duptitles: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        avg_unicity: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        },
-        avg_AnchorsVar: {
-            def: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pulvinar fermentum elit, at facilisis nunc mollis sed. Integer quis dapibus libero, et vestibulum urna.",
-            impo: "Mauris ultricies nulla sit amet massa suscipit egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam commodo tellus ac gravida imperdiet. Integer scelerisque, tellus vitae posuere placerat, eros nulla egestas sem, eu imperdiet nisl ligula ac arcu. ",
-            todo: "Nunc tincidunt, est at feugiat tempus, turpis turpis porttitor sapien, in euismod augue velit sollicitudin erat. Vestibulum tincidunt magna et auctor lobortis. Fusce accumsan convallis nisi, non rutrum ante tincidunt in. Suspendisse quis congue lorem. Suspendisse vel elit vel velit pulvinar rutrum."
-        }
-}
 
 const bossText =  {
     start: {
@@ -998,19 +701,25 @@ const chartOptions = {
         }
 }
 
-// class Boss_Start extends Component {
-//     render() {
-//     return (
-//         <h3>H</h3>
-//     );
-//     }
-//
-// }
+//function numberWithCommas(x) {
+//    var parts = x.toString().split(".");
+//    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//    return parts.join(".");
+//}
+
+function numberWithCommasPCT(x) {
+    
+    if (x > 0) {
+       return ('+' + x.toLocaleString('en')); 
+    }
+    else {
+        return x.toLocaleString('en');
+    }
+}
 
 function numberWithCommas(x) {
-    var parts = x.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+    
+    return x.toLocaleString('en');
 }
 
 
@@ -1023,6 +732,482 @@ function setColorDown(x) {
     }
 }
 
+/*//////////////////////////////
+
+REACT CLASS DEFINITONS
+
+*////////////////////////////////
+
+class Example extends Component {
+     render() {
+        return (
+            <div>
+                <h3>TEST!</h3>
+            </div> 
+        );
+     }
+}
+
+class ChartEvo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            kpiName: 'Visits',
+            data: evoData,
+            dataKey: 'visits'
+        };
+    }
+    render() {
+        return (
+            <div>
+                <div className="left-1">
+                   <h3>{this.props.kpiName}, evolution</h3>
+                   <div className="box-4">
+                       <ResponsiveContainer height={130}>
+                        <AreaChart data={this.props.data}
+                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
+                          <XAxis dataKey="name"/>
+                          <YAxis/>
+                          <CartesianGrid strokeDasharray="3 3"/>
+                          <Tooltip/>
+                          <Area type='monotoneX' dataKey={this.props.dataKey} stroke='#000' fill='#000' dot={{ stroke: 'black', strokeWidth: 1 }}/>
+                        </AreaChart>
+                    </ResponsiveContainer>
+                   </div>
+                </div> 
+            </div> 
+        );
+     }
+}
+
+
+
+class KPIsRow extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            kpi: 'Visits',
+            kpiValue: evoData[week].visits,
+            kpiEvo: Math.round(1000*(evoData[week]['visits'] - evoData[week-1]['visits'])/ evoData[week-1]['visits'])/10,
+            evoData: evoData,
+            segData: segData,
+            selected_kpi: 'visits'
+        };
+    this.setColorUp = this.setColorUp.bind(this);
+    this.setColorDown = this.setColorDown.bind(this);
+    }
+
+    setColorUp(x) {
+        if (x == 0) {
+            return {color: "black"};
+        }
+        else if (x > 0) {
+            return {color: "#66bb6a"};
+        }
+        else  {
+            return {color: "#ef5350"};
+        }
+    }
+    setColorDown(x) {
+        if (x == 0) {
+            return {color: "black"};
+        }
+        else if (x > 0) {
+            return {color: "#ef5350"};
+        }
+        else  {
+            return {color: "#66bb6a"};
+        }
+    }
+    
+    render() {
+        var setColor;
+        var kpi = this.props.kpi;
+        if (kpi == 'Not Indexable Pages'| kpi == 'Crawled Not Index. Pages' | kpi == 'Avg. Depth' | kpi == 'Avg. Load Times' | kpi == 'Duplicate Titles %') {
+            setColor = this.setColorDown;
+        }
+        else {
+            setColor = this.setColorUp;
+        }
+        
+        return (
+            <div>
+                <Row className="show-grid">
+                    <Col md={12} lg={6}>
+                        <div className="left-1">
+                            <Row className="col-1">
+                               <Col xs={12} className="kpi-box">
+                                <div className="intro-kpi">
+                                    <span className="intro-kpitext">{this.props.title1}</span>
+                                </div>
+                               <div className="bigkpi">
+                                  <span className="bigkpitext" style={this.props.style}>{this.props.kpi}</span>
+                                </div>
+                               </Col>
+                            </Row>
+
+
+                        </div>
+                    </Col>
+                    <Col md={12} lg={6}>
+                            <Col xs={6} className="kpi-box">
+                                <div className="intro-kpi1">
+                                    <span className="intro-kpitext">{this.props.title2}</span>
+                                </div>
+                                <div className="smallkpi">
+                                    <span className="smallkpitext">{numberWithCommas(this.props.kpiValue)}{this.props.pct}</span>
+                                </div>
+                            </Col>
+                            <Col xs={6} className="kpi-box">
+                                <div className="intro-kpi2">
+                                    <span className="intro-kpitext">{this.props.title3}</span>
+                                </div>
+                                <div className="smallevo">
+                                  <span className="smallevotext" style={setColor(this.props.kpiEvo)}>{numberWithCommasPCT(this.props.kpiEvo)}%</span>
+                                </div>
+                            </Col>                               
+                    </Col>
+                </Row>
+            </div> 
+        );
+     }
+}
+
+class ChartBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            kpi: 'Visits',
+            segData: segData,
+            selected_kpi: 'visits'
+        };
+    }
+    render() {
+        return (
+            <div>
+                <div className="left-1">
+                    <h3>{this.props.kpiName}, by templates</h3>
+                    <div className="box-3">
+                        <ResponsiveContainer height={230}>
+                            <BarChart data={this.props.data}>
+                              <XAxis dataKey="name" />
+                              <YAxis />
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <Tooltip />
+
+                              <Bar dataKey={this.props.dataKey} fill={this.props.fill} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            </div> 
+        );
+     }
+}
+
+class ChartRadialBar extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            kpi: 'Visits',
+            segData: segData,
+            selected_kpi: 'visits'
+        };
+    }
+    render() {
+        return (
+            <div>
+                <div className="left-1">
+                <h3>{this.props.kpiName}, Distribution</h3>
+                    <div className="box-3">
+                    <ResponsiveContainer height={230}>
+                        <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.props.data}>          
+                            <RadialBar minAngle={15} label background clockWise={true} dataKey={this.props.dataKey}/>               
+                            <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/>
+                            <Tooltip/>
+                        </RadialBarChart>
+                    </ResponsiveContainer>
+                    </div>
+                </div>  
+            </div> 
+        );
+     }
+}
+
+const COLORS = ['#b39ddb', '#9fa8da', '#90caf9', '#fff59d', '#ffcc80'];
+const COLORS_INDEX = ['#69f0ae', '#eeff41'];
+const COLORS_CRAWLED = ['#40c4ff', '#ff5252'];
+const COLORS_ACTIVE = ['#69f0ae', '#ff5252'];
+
+
+const RADIAN = Math.PI / 180;                    
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x  = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy  + radius * Math.sin(-midAngle * RADIAN);
+ 
+  return (
+    <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} 	dominantBaseline="central">
+    	{`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const style2 = {
+top: 0,
+left: 350,
+lineHeight: '24px'
+};
+
+class ChartPie extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
+    render() {
+        var data = this.props.data;
+        return (
+            <div>
+                <div className="left-1">
+                    <h3>{this.props.kpiName}, by templates</h3>
+                    <div className="box-3">
+                        
+                            <PieChart width={275} height={275} >
+                                <Pie 
+                              
+                                data={data} 
+                                cx={150} 
+                                cy={125}
+                                
+                                >
+                                {
+                                    data.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                                }
+                                </Pie>
+                            <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' wrapperStyle={style2}/>
+                            <Tooltip/>
+                            </PieChart>
+                       
+                    </div>
+                </div>
+            </div> 
+        );
+     }
+}
+
+var pieColors = {
+    comp_pages: COLORS_INDEX,
+    notcomp_pages: COLORS_INDEX,
+    crawled_comp_pages: COLORS_CRAWLED,
+    crawled_notcomp_pages: COLORS_CRAWLED,
+    active_comp_pages: COLORS_ACTIVE,
+    active_notcomp_pages: COLORS_ACTIVE
+}
+
+class ChartPiePages extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+    
+    render() {
+        var data = this.props.data;
+        var kpiName = this.props.kpiName;
+        var dataKey = this.props.dataKey;
+        var COLORS_INDEX = this.props.colors;
+
+            return (
+            <div>
+                <div className="left-1">
+                    <h3>{kpiName}, distribution</h3>
+                    <div className="box-3">
+                        
+                            <PieChart width={275} height={275} >
+                                <Pie 
+                              
+                                data={data} 
+                                cx={150} 
+                                cy={125}
+                                
+                                >
+                                {
+                                    data.map((entry, index) => <Cell fill={COLORS_INDEX[index % COLORS_INDEX.length]}/>)
+                                }
+                                </Pie>
+                            <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' wrapperStyle={style2}/>
+                            <Tooltip/>
+                            </PieChart>
+                       
+                    </div>
+                </div>
+            </div> 
+        );
+
+ 
+     }
+}
+
+//<ChartPie kpiName={this.state.selected_kpi} data={this.state.segData_pie} />
+
+class CourseTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            kpi: 'Visits',
+            kpiTextDef: "The number of organic visits generated in one month.",
+            kpiTextToDo: "To increase your Visits, you need to analyze all the KPIs, and then spend credits on Marketing and Technical SEO Tasks."
+        };
+    }
+    render() {
+        return (
+            <div>
+                <Table striped bordered condensed hover responsive className="def-tab">
+                    <tbody>
+                        <tr>
+                            <td className="def-tab-labels">Selected KPI</td>
+                            <td className="def-tab-labels-kpi">{this.props.kpiName}</td>
+                        </tr>
+                        <tr>
+                            <td className="def-tab-labels">Definition</td>
+                            <td className="def-tab-text">{this.props.kpiTextDef}</td>
+                        </tr>
+                        <tr>
+                            <td className="def-tab-labels">Why it's important?</td>
+                            <td className="def-tab-text">{this.props.kpiTextImpo}</td>
+                        </tr>
+                        <tr>
+                            <td className="def-tab-labels">What should I do?</td>
+                            <td className="def-tab-text">{this.props.kpiTextToDo}</td>
+                        </tr>
+                    </tbody>
+                </Table>  
+            </div> 
+        );
+     }
+}
+
+class KPIsTableLine_UP extends React.Component {
+    constructor(props) {
+        super(props);
+
+    }
+    setColorUp(x) {
+        if (x == 0) {
+            return {color: "black"};
+        }
+        else if (x > 0) {
+            return {color: "green"};
+        }
+        else  {
+            return {color: "red"};
+        }
+    }
+    evoDiff(evoData, curweek, kpi) {
+ 
+        return Math.round(1000*(evoData[curweek][kpi] - evoData[curweek-1][kpi])/ evoData[curweek-1][kpi])/10;
+        
+    }
+    
+    render() {
+        var kpiName = this.props.kpiName;
+        var stateWeek = this.props.stateWeek;
+        var kpiKey = this.props.kpiKey;
+        
+        return (
+                <tr>
+                    <td className="kpi-col">{kpiName}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][0][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][1][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][2][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][3][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][4][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(evoData[stateWeek][kpiKey])}{this.props.pct}</td>
+                    <td style={this.setColorUp(this.evoDiff(evoData, stateWeek, kpiKey))}>{numberWithCommasPCT(this.evoDiff(evoData, stateWeek, kpiKey))}%</td>
+                </tr>
+        );
+     }
+}
+
+//<KPIsTableLine_UP kpiName="Visits" stateWeek={this.state.week} kpiKey="visits"/>
+
+class KPIsTableLine_DOWN extends React.Component {
+    constructor(props) {
+        super(props);
+
+    }
+    setColorDown(x) {
+        if (x == 0) {
+            return {color: "black"};
+        }
+        else if (x > 0) {
+            return {color: "red"};
+        }
+        else  {
+            return {color: "green"};
+        }
+    }
+    evoDiff(evoData, curweek, kpi) {
+ 
+        return Math.round(1000*(evoData[curweek][kpi] - evoData[curweek-1][kpi])/ evoData[curweek-1][kpi])/10;
+        
+    }
+    
+    render() {
+        var kpiName = this.props.kpiName;
+        var stateWeek = this.props.stateWeek;
+        var kpiKey = this.props.kpiKey;
+        
+        return (
+                <tr>
+                    <td>{kpiName}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][0][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][1][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][2][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][3][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(allSegData[stateWeek-1][4][kpiKey])}{this.props.pct}</td>
+                    <td>{numberWithCommas(evoData[stateWeek][kpiKey])}{this.props.pct}</td>
+                    <td style={this.setColorDown(this.evoDiff(evoData, stateWeek, kpiKey))}>{this.evoDiff(evoData, stateWeek, kpiKey)}%</td>
+                </tr>
+        );
+     }
+}
+
+//<KPIsTableLine_UP kpiName="Visits" stateWeek={this.state.week} kpiKey="visits"/>
+
+
+
+
+
+var products = [{
+      id: 1,
+      name: "Product1",
+      price: 120
+  }, {
+      id: 2,
+      name: "Product2",
+      price: 80
+  }];
+
+let order = 'desc';
+
+
+var creditsTech = 6;
+var creditsMarket = 4;
+
+const style3 = {
+fontSize: '4em'
+};
+
+
+
+
+
+
+/*//////////////////////////////
+
+MAIN APPLICATION
+
+*////////////////////////////////
+
 
 
 
@@ -1033,10 +1218,13 @@ export default class Boss_Start extends Component {
         this.state = {
             week: week,
             kpi: 'Visits',
-            kpiValue: evoData[1].visits,
+            kpiValue: evoData[week].visits,
             kpiEvo: Math.round(1000*(evoData[week]['visits'] - evoData[week-1]['visits'])/ evoData[week-1]['visits'])/10,
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
+            segData_piepages: segData_piepages[week].comp_pages,
+            pieColors: pieColors.comp_pages,
             selected_kpi: 'visits',
             seoCourse: "Hi SEO GUY, I'm your SEO teacher.",
             seoConclusion: "Please, select a KPI on the right panel to analyze it on the charts below.",
@@ -1049,6 +1237,12 @@ export default class Boss_Start extends Component {
             bossConslusion: bossText.start.end,
             marketIntro: "Hello SEO GUY, I'm the Marketing Girl.",
             marketText: "What do you want to do?",
+            creditsTech: creditsTech,
+            creditsMarket: creditsMarket,
+            tasksTech: [],
+            tasksMarket: [],
+            clearTasksSelection: false,
+            showModal: false
         };
         this.goToNextWeek = this.goToNextWeek.bind(this);
         this.missionTab = this.missionTab.bind(this);
@@ -1058,15 +1252,31 @@ export default class Boss_Start extends Component {
         this.nextweekTab = this.nextweekTab.bind(this);
         this.supportTab = this.supportTab.bind(this);
         this.displayEVO = this.displayEVO.bind(this);
+        this.displayEVO2 = this.displayEVO2.bind(this);
+        this.displayEVO3 = this.displayEVO3.bind(this);
+        this.onSelectAll = this.onSelectAll.bind(this);
+        this.onRowSelectTech = this.onRowSelectTech.bind(this);
+        this.onRowSelectMarket = this.onRowSelectMarket.bind(this);
+        this.validateTasksTECH = this.validateTasksTECH.bind(this);
+        this.validateTasksMARK = this.validateTasksMARK.bind(this);
+        this.open = this.open.bind(this);
+        this.close = this.close.bind(this);
+      
     }
+ 
+
+
     missionTab(event) {
         this.setState({
             week: week,
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
-            key: 'first'
+            key: 'first',
+            kpiValue: evoData[this.state.week].visits,
+            kpiEvo: this.evoDiff(evoData, this.state.week, "visits"),
         });
     }
     analysisTab (event) {
@@ -1075,6 +1285,7 @@ export default class Boss_Start extends Component {
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
             key: 'second',
             kpiValue: evoData[this.state.week].visits,
@@ -1087,6 +1298,7 @@ export default class Boss_Start extends Component {
             kpi: 'Crawl Ratio',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'crawl_ratio_oncomp',
             key: 'second-2',
             kpiValue: evoData[this.state.week].crawl_ratio_oncomp,
@@ -1099,6 +1311,7 @@ export default class Boss_Start extends Component {
             kpi: 'Indexable Pages',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'comp_pages',
             key: 'second-3',
             kpiValue: evoData[this.state.week].comp_pages,
@@ -1108,25 +1321,27 @@ export default class Boss_Start extends Component {
     structureTab (event) {
         this.setState({
             week: week,
-            kpi: 'Crawl Ratio',
+            kpi: 'Internal Links',
             evoData: evoData,
             segData: segData,
-            selected_kpi: 'crawl_ratio_oncomp',
+            segData_pie: segData_pie.visits,
+            selected_kpi: 'avg_inlinks',
             key: 'second-4',
-            kpiValue: evoData[this.state.week].crawl_ratio_oncomp,
-            kpiEvo: this.evoDiff(evoData, this.state.week, "crawl_ratio_oncomp"),
+            kpiValue: evoData[this.state.week].avg_inlinks,
+            kpiEvo: this.evoDiff(evoData, this.state.week, "avg_inlinks"),
         });
     }
     qualityTab (event) {
         this.setState({
             week: week,
-            kpi: 'Crawl Ratio',
+            kpi: 'Duplicate Titles %',
             evoData: evoData,
             segData: segData,
-            selected_kpi: 'crawl_ratio_oncomp',
+            segData_pie: segData_pie.visits,
+            selected_kpi: 'pct_duptitles',
             key: 'second-5',
-            kpiValue: evoData[this.state.week].crawl_ratio_oncomp,
-            kpiEvo: this.evoDiff(evoData, this.state.week, "crawl_ratio_oncomp"),
+            kpiValue: evoData[this.state.week].pct_duptitles,
+            kpiEvo: this.evoDiff(evoData, this.state.week, "pct_duptitles"),
         });
     }
     marketingTab(event) {
@@ -1135,6 +1350,7 @@ export default class Boss_Start extends Component {
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
             key: 'third'
         });
@@ -1146,6 +1362,7 @@ export default class Boss_Start extends Component {
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
             key: 'fourth'
         });
@@ -1156,6 +1373,7 @@ export default class Boss_Start extends Component {
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
             key: 'fith'
         });
@@ -1166,6 +1384,7 @@ export default class Boss_Start extends Component {
             kpi: 'Visits',
             evoData: evoData,
             segData: segData,
+            segData_pie: segData_pie.visits,
             selected_kpi: 'visits',
             key: 'sixth'
         });
@@ -1200,17 +1419,26 @@ export default class Boss_Start extends Component {
 
     goToNextWeek(event) {
 
-        nextWeek(this.state.week);
+        nextWeek(this.state.week, this.state.tasksTech, this.state.tasksMarket);
+        
+        this.refs.table1.cleanSelected();
+        this.refs.table2.cleanSelected();
 
         this.setState({
             week: week,
             evoData: evoData,
             segData: segData,
-            kpiValue: evoData[this.state.week].visits,
+            kpiValue: evoData[this.state.week + 1].visits,
+            //segData_pie: segData_pie.visits,
+            segData_piepages: segData_piepages[week].comp_pages,
             kpiEvo: this.evoDiff(evoData, this.state.week + 1, "visits"),
             kpi: 'Visits',
             selected_kpi: 'visits',
-            key: 'first'
+            key: 'first',
+            creditsTech: creditsTech,
+            creditsMarket: creditsMarket,
+            tasksTech: [],
+            tasksMarket: []
         });
         console.log("setColorUp(this.state.week)");
         console.log(this.state.week);
@@ -1219,25 +1447,93 @@ export default class Boss_Start extends Component {
 
     goToNextWeekTest(event) {
 
-        nextWeek(this.state.week);
+        nextWeek(this.state.week, this.state.tasksTech, this.state.tasksMarket);
+        
+        this.refs.table1.cleanSelected();
+        this.refs.table2.cleanSelected();
 
         this.setState({
             week: week,
             evoData: evoData,
             segData: segData,
-            kpiValue: evoData[this.state.week].visits,
+            kpiValue: evoData[this.state.week + 1].visits,
+            //segData_pie: segData_pie.visits,
+            segData_piepages: segData_piepages[week].comp_pages,
             kpiEvo: this.evoDiff(evoData, this.state.week + 1, "visits"),
             kpi: 'Visits',
             selected_kpi: 'visits',
-            key: 'first'
+            key: 'first',
+            creditsTech: creditsTech,
+            creditsMarket: creditsMarket,
+            tasksTech: [],
+            tasksMarket: []
         });
         console.log("setColorUp(this.state.week)");
         console.log(this.state.week);
         console.log(this.setColorUp(this.state.week));
     }
 
+    displayEVO(event, name, selectedkpi) {
+            
+        var kpiValue = this.state.evoData[week][selectedkpi];
+        var kpiEvo = this.evoDiff(evoData, this.state.week, selectedkpi);
+        var kpiTextDef = kpiTextData[selectedkpi].def;
+        var kpiTextToDo = kpiTextData[selectedkpi].todo;
 
-    displayEVO(event, name, selectedkpi, kpiValue, kpiEvo, kpiTextDef, kpiTextToDo) {
+        this.setState({
+            week: week,
+            kpi: name,
+            kpiValue: kpiValue,
+            kpiEvo: kpiEvo,
+            evoData: evoData,
+            segData: segData,
+            selected_kpi: selectedkpi,
+            seoCourse: name + ':',
+            seoConclusion: '',
+            kpiTextDefTag: '',
+            kpiTextToDoTag: '',
+            kpiTextDef: kpiTextDef,
+            kpiTextToDo: kpiTextToDo
+        });
+    };
+    
+    
+    displayEVO2(event, name, selectedkpi) {
+            
+        var kpiValue = this.state.evoData[week][selectedkpi];
+        var kpiEvo = this.evoDiff(evoData, this.state.week, selectedkpi);
+        var kpiTextDef = kpiTextData[selectedkpi].def;
+        var kpiTextToDo = kpiTextData[selectedkpi].todo;
+        var kpiPieValue = segData_pie[selectedkpi];
+        var kpiPiePagesValue = segData_piepages[week][selectedkpi];
+        var kpiPieColors = pieColors[selectedkpi];
+
+        this.setState({
+            week: week,
+            kpi: name,
+            kpiValue: kpiValue,
+            kpiEvo: kpiEvo,
+            evoData: evoData,
+            segData: segData,
+            segData_pie: kpiPieValue,
+            segData_piepages: kpiPiePagesValue,
+            selected_kpi: selectedkpi,
+            seoCourse: name + ':',
+            seoConclusion: '',
+            kpiTextDefTag: '',
+            kpiTextToDoTag: '',
+            kpiTextDef: kpiTextDef,
+            kpiTextToDo: kpiTextToDo,
+            pieColors: kpiPieColors
+        });
+    };
+    
+    displayEVO3(event, name, selectedkpi) {
+            
+        var kpiValue = this.state.evoData[week][selectedkpi];
+        var kpiEvo = this.evoDiff(evoData, this.state.week, selectedkpi);
+        var kpiTextDef = kpiTextData[selectedkpi].def;
+        var kpiTextToDo = kpiTextData[selectedkpi].todo;
 
         this.setState({
             week: week,
@@ -1253,116 +1549,218 @@ export default class Boss_Start extends Component {
             kpiTextToDoTag: '',
             kpiTextDef: kpiTextDef,
             kpiTextToDo: kpiTextToDo,
+            segData_pie: segData_pie[selectedkpi],
         });
     };
     
     
+    onRowSelectTech(row, isSelected, e) {
+
+        var credits = this.state.creditsTech;
+        var tasks = this.state.tasksTech;
+        
+        if (isSelected) {
+            
+            if (credits - row.credits >= 0) {
+                
+                credits = credits - row.credits;
+                tasks.push(row);
+                
+                this.setState({
+                    creditsTech: credits,
+                    tasksTech: tasks
+                });
+            }
+            else {
+                return false;
+            }
+            
+        }
+        else {
+
+            if (credits + row.credits <= creditsTech) {
+                
+                credits = credits + row.credits;
+                var index = tasks.indexOf(row);
+                if (index >= 0) {
+                    tasks.splice(index, 1);
+                }
+                
+                this.setState({
+                    creditsTech: credits,
+                    tasksTech: tasks
+                });
+            }
+            else {
+                return false;
+            }           
+        }
+
+        
+    };
+    onRowSelectMarket(row, isSelected, e) {
+
+        var credits = this.state.creditsMarket;
+        var tasks = this.state.tasksMarket;
+        
+        
+        if (isSelected) {
+            
+            if (credits - row.credits >= 0) {
+                
+                credits = credits - row.credits;
+                tasks.push(row);
+                
+                this.setState({
+                    creditsMarket: credits,
+                    tasksMarket: tasks
+                });
+            }
+            else {
+                return false;
+            }
+            
+        }
+        else {
+
+            if (credits + row.credits <= creditsMarket) {
+                
+                credits = credits + row.credits;
+                var index = tasks.indexOf(row);
+                if (index >= 0) {
+                    tasks.splice(index, 1);
+                }
+                
+                this.setState({
+                    creditsMarket: credits,
+                    tasksMarket: tasks
+                });
+            }
+            else {
+                return false;
+            }           
+        }
+
+        
+    };
+
+    onSelectAll(isSelected, rows) {
+        return false;
+    };
+    
+    validateTasksTECH (event) {
+        alert('Your Technical Tasks are validated!');
+    };
+    
+    validateTasksMARK (event) {
+        alert('Your Marketing Tasks are validated!');
+    };
+    
+    close() {
+        this.setState({ showModal: false });
+    };
+
+    open() {
+        this.setState({ showModal: true });
+    };
+    
     render() {
+        
+    const selectRowProp = {
+        mode: 'checkbox',
+        bgColor: '#fcd1d1',
+        clickToSelect: true,
+        onSelect: this.onRowSelectTech,
+        onSelectAll: this.onSelectAll
+    };
+    
+    const selectRowProp2 = {
+        mode: 'checkbox',
+        bgColor: '#fcd1d1',
+        clickToSelect: true,
+        onSelect: this.onRowSelectMarket,
+        onSelectAll: this.onSelectAll
+    };
     
     return (
-        <div>
+ <div>
 
-            <Row className="top-div">
-                <Col xs={2} className="logo">
-                    <center><h1>SEO GUY</h1></center>
-                </Col>
-                <Col xs={10} className="top-bar">
-                    <span>Week #{this.state.week - pastweek}</span>
-                </Col>
-            </Row>
+           
+    <Row className="top-div">
+       
+        <Col xs={2} className="logo">
+            <center>
+                <h1>SEO GUY</h1></center>
+                
+        </Col>
+        <Col xs={10} className="top-bar">
+            <span>Week #{this.state.week - pastweek}</span>
+        </Col>
+    </Row>
     <Tab.Container id="left-tabs-example" defaultActiveKey="first" activeKey={this.state.key}>
         <Row className="clearfix main-div">
-          <Col xs={2} className="sidebar">
-            <Nav bsStyle="pills" stacked>
-                <NavItem eventKey="first"><Button bsStyle="default" bsSize="large" onClick={event => this.missionTab(event)} className="barbutton">Your Mission</Button></NavItem>
-                <NavItem eventKey="second"><Button bsStyle="default" bsSize="large" onClick={event => this.analysisTab(event)} className="barbutton">Main SEO KPIs</Button>
-                </NavItem>
-                <NavItem eventKey="second-2"><Button bsStyle="default" bsSize="large" onClick={event => this.ratioTab(event)} className="barbutton">Main SEO Ratios</Button>
-                </NavItem>
-                <NavItem eventKey="second-3"><Button bsStyle="default" bsSize="large" onClick={event => this.pagesTab(event)} className="barbutton">Pages KPIs</Button>
-                </NavItem>
-                <NavItem eventKey="second-4"><Button bsStyle="default" bsSize="large" onClick={event => this.structureTab(event)} className="barbutton">Structural KPIs</Button>
-                </NavItem>
-                <NavItem eventKey="second-5"><Button bsStyle="default" bsSize="large" onClick={event => this.qualityTab(event)} className="barbutton">Quality KPIs</Button>
-                </NavItem>
-                <NavItem eventKey="third"><Button bsStyle="default" bsSize="large" onClick={event => this.marketingTab(event)} className="barbutton">Marketing Tasks</Button></NavItem>
-                <NavItem eventKey="fourth"><Button bsStyle="default" bsSize="large" onClick={event => this.techTab(event)} className="barbutton">Technical Tasks</Button></NavItem>
-                <NavItem eventKey="fith"><Button bsStyle="default" bsSize="large" onClick={event => this.nextweekTab(event)} className="barbutton">Go To Next Week</Button></NavItem>
-                <NavItem eventKey="sixth"><Button bsStyle="default" bsSize="large" onClick={event => this.supportTab(event)} className="barbutton">Support Us!</Button></NavItem>
-            </Nav>
-          </Col>
-          <Col xs={10} className="maincontent">
-            <Tab.Content animation>
-              <Tab.Pane eventKey="first">
+            <Col xs={2} className="sidebar">
+                <Nav bsStyle="pills" stacked>
+                    <NavItem eventKey="first">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.missionTab(event)} className="barbutton">Your Mission</Button>
+                    </NavItem>
+                    <NavItem eventKey="second">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.analysisTab(event)} className="barbutton">Main SEO KPIs</Button>
+                    </NavItem>
+                    <NavItem eventKey="second-2">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.ratioTab(event)} className="barbutton">Main SEO Ratios</Button>
+                    </NavItem>
+                    <NavItem eventKey="second-3">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.pagesTab(event)} className="barbutton">Pages KPIs</Button>
+                    </NavItem>
+                    <NavItem eventKey="second-4">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.structureTab(event)} className="barbutton">Structural KPIs</Button>
+                    </NavItem>
+                    <NavItem eventKey="second-5">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.qualityTab(event)} className="barbutton">Quality KPIs</Button>
+                    </NavItem>
+                    <NavItem eventKey="fourth">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.techTab(event)} className="barbutton">Technical Tasks</Button>
+                    </NavItem>
+                    <NavItem eventKey="third">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.marketingTab(event)} className="barbutton">Marketing Tasks</Button>
+                    </NavItem>
+                    <NavItem eventKey="fith">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.nextweekTab(event)} className="barbutton">Go To Next Week</Button>
+                    </NavItem>
+                    <NavItem eventKey="sixth">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.supportTab(event)} className="barbutton">Support Us!</Button>
+                    </NavItem>
+                </Nav>
+            </Col>
+            <Col xs={10} className="maincontent">
+                <Tab.Content animation>
+                    <Tab.Pane eventKey="first">
+
                         <div className="title-div">
                             <Image src={bossguy} responsive className="smallimage" />
                             <h1 className="title-h1">Mission Status</h1>
-                            <p className="title-p">Hi SEO Guy, I need you to generate 100K visits per month ASAP!</p>
+                            <p className="title-p">Hi SEO Guy, I'm your new boss and the CEO of LicornesMagazine.com.
+                            <br/>I need you to generate 100K visits per month ASAP! Don't disappoint me!</p>
                         </div>
-                        
+
                         <div className="spacediv"></div>
                         
-                        <Row className="show-grid">
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Objective</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="objective-text">100K visits per week</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
+                        <KPIsRow kpi="100K visits per week" kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo}
+                            style={{fontSize: '3em'}}
+                            title1="Objective"
+                            title2="Current Visits"
+                            title3="Visits Evolution"/>
 
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">Current visits</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
-                                            <br/>
-                                            <span>on this week</span>
-                                        </div>
-                                    </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">Visits evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
-                            </Col>
-                        </Row>
                         <Row className="show-grid">
                             <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
 
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
                         </Row>
 
                         <Row className="show-grid">
-                           
+
                             <Col xs={12}>
                                 <Table striped bordered condensed hover responsive className="def-tab">
                                     <tbody>
@@ -1391,1061 +1789,567 @@ export default class Boss_Start extends Component {
                                             <td className="def-tab-labels">Marketing Tasks</td>
                                             <td className="def-tab-text">No Marketing Tasks on week #{this.state.week - pastweek}:
                                             </td>
-                                        </tr>                                        
+                                        </tr>
                                     </tbody>
-                                </Table>                            
+                                </Table>
+                            </Col>
+                        </Row>
+
+                        <div className="spacediv"></div>
+
+                    </Tab.Pane>
+
+
+                    <Tab.Pane eventKey="second">
+
+                        <div className="title-div">
+
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">SEO KPIs Analysis</h1>
+                            <p className="title-p">Hi SEO Guy, I'm the SEO Consultant. Here are your Main SEO KPIs.
+                            <br/>Use the buttons below to select a KPI and analyze it</p>
+                        </div>
+                        <Row className="show-grid">
+                            <div className="kpis-selection">
+                                
+                                
+                                <ButtonToolbar className="kpis-tab">
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO3(event,'Visits','visits')}>Visits</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO3(event,'Pages','pages')}>Pages</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO3(event,'Active Pages','active_pages')}>Active Pages</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO3(event,'Visits by AP','visits_byAP')}>Visits by AP</Button>
+                                </ButtonToolbar>
+                            </div>
+                        </Row>
+
+                        <KPIsRow kpi={this.state.kpi} kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo} 
+                            title1="Selected KPI"
+                            title2="KPI value"
+                            title3="KPI evolution"/>
+                            
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+
+                        <Row className="show-grid">
+                            <Col md={12} lg={6}>
+                                <ChartPie kpiName={this.state.kpi} data={this.state.segData_pie} color={COLORS}/>
+                            </Col>
+                            <Col md={12} lg={6}>
+                                <ChartRadialBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Table striped bordered condensed hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>WEEK #{this.state.week - pastweek} - KPIs</th>
+                                    <th>{this.state.segData[0].name}</th>
+                                    <th>{this.state.segData[1].name}</th>
+                                    <th>{this.state.segData[2].name}</th>
+                                    <th>{this.state.segData[3].name}</th>
+                                    <th>{this.state.segData[4].name}</th>
+                                    <th>All Pages</th>
+                                    <th>Evolution</th>
+                                </tr>
+                            </thead>                            
+                            <tbody>
+                                <KPIsTableLine_UP kpiName="Visits" stateWeek={this.state.week} kpiKey="visits"/>
+                                <KPIsTableLine_UP kpiName="Total Pages" stateWeek={this.state.week} kpiKey="pages"/>
+                                <KPIsTableLine_UP kpiName="Active Pages" stateWeek={this.state.week} kpiKey="active_pages"/>
+                                <KPIsTableLine_UP kpiName="Visits by Active Page" stateWeek={this.state.week} kpiKey="visits_byAP"/>              
+                            </tbody>
+                        </Table>
+                        <div className="spacediv"></div>
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <CourseTable kpiName={this.state.kpi} kpiTextDef={this.state.kpiTextDef} kpiTextImpo={this.state.kpiTextDef} kpiTextToDo={this.state.kpiTextToDo} />
+                            </Col>
+                        </Row>
+
+                        <div className="spacediv"></div>
+                        <ButtonToolbar>
+                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeekTest(event)} >Go To The Next Week!</Button>
+                        </ButtonToolbar>
+ 
+                        <div className="spacediv"></div>
+
+                    </Tab.Pane>
+                    <Tab.Pane eventKey="second-2">
+                        <div className="title-div">
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">Main SEO Ratios</h1>
+                            <p className="title-p">Let's learn about your website Main SEO Ratios.
+                            <br/>Use the buttons below to select a KPI and analyze it.</p>
+                        </div>
+
+                        <Row className="show-grid">
+                            <div className="kpis-selection">
+                                <ButtonToolbar className="kpis-tab">
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO(event,'Crawl Ratio', 'crawl_ratio_oncomp')}>Crawl Ratio</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO(event,'Active Ratio', 'active_ratio_oncomp')}>Active Ratio</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO(event,'Indexability Ratio', 'indexable_ratio')}>Indexability Ratio</Button>
+                                </ButtonToolbar>
+                            </div>
+                        </Row>
+                        
+                        <KPIsRow kpi={this.state.kpi} kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo} 
+                            title1="Selected KPI"
+                            title2="KPI value"
+                            title3="KPI evolution"
+                            pct="%"/>
+                            
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Row className="show-grid">
+                            <Col md={12} lg={6}>
+                                <ChartBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} fill="#000" />
+                            </Col>
+                            <Col md={12} lg={6}>
+                                <ChartRadialBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Table striped bordered condensed hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>WEEK #{this.state.week - pastweek} - KPIs</th>
+                                    <th>{this.state.segData[0].name}</th>
+                                    <th>{this.state.segData[1].name}</th>
+                                    <th>{this.state.segData[2].name}</th>
+                                    <th>{this.state.segData[3].name}</th>
+                                    <th>{this.state.segData[4].name}</th>
+                                    <th>All Pages</th>
+                                    <th>Evolution</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <KPIsTableLine_UP kpiName="Indexability Ratio" stateWeek={this.state.week} kpiKey="indexable_ratio" pct="%"/>
+                                <KPIsTableLine_UP kpiName="Crawl Ratio" stateWeek={this.state.week} kpiKey="crawl_ratio_oncomp" pct="%"/>
+                                <KPIsTableLine_UP kpiName="Active Ratio" stateWeek={this.state.week} kpiKey="active_ratio_oncomp" pct="%"/>             
+                            </tbody>
+                        </Table>
+                        <div className="spacediv"></div>
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <CourseTable kpiName={this.state.kpi} kpiTextDef={this.state.kpiTextDef} kpiTextImpo={this.state.kpiTextDef} kpiTextToDo={this.state.kpiTextToDo} />
+                            </Col>
+                        </Row>
+                    <div className="spacediv"></div>
+                    </Tab.Pane>
+
+
+                    <Tab.Pane eventKey="second-3">
+                        <div className="title-div">
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">Pages Indexability KPIs</h1>
+                            <p className="title-p">Let's learn about your Pages Indexability KPIs.
+                            <br/>Use the buttons below to select a KPI and analyze it.</p>
+                        </div>
+
+                        <Row className="show-grid">
+                            <div className="kpis-selection">
+                                <ButtonToolbar className="kpis-tab">
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Indexable Pages', 'comp_pages')}>Indexable</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Crawled Index. Pages', 'crawled_comp_pages')}>Crawled Indexable</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Active Index. Pages', 'active_comp_pages')}>Active Indexable</Button>
+                                </ButtonToolbar>
+
+                                <ButtonToolbar className="kpis-tab">
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Not Indexable Pages', 'notcomp_pages')}>Not Indexable</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Crawled Not Index. Pages', 'crawled_notcomp_pages')}>Crawled Not Indexable</Button>
+
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-23" 
+                                    onClick={event=> this.displayEVO2(event,'Active Not Index. Pages', 'active_notcomp_pages')}>Active Not Indexable</Button>
+                                </ButtonToolbar>
+                            </div>
+                        </Row>
+
+                        <KPIsRow kpi={this.state.kpi} kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo}
+                            style={{fontSize: '3em'}}
+                            title1="Selected KPI"
+                            title2="KPI value"
+                            title3="KPI evolution"/>
+                            
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Row className="show-grid">
+                            <Col md={12} lg={6}>
+                                <ChartPie kpiName={this.state.kpi} data={this.state.segData_pie} />
+                            </Col>
+                            <Col md={12} lg={6}>
+                                <ChartPiePages kpiName={this.state.kpi} data={this.state.segData_piepages} dataKey={this.state.selected_kpi} colors={this.state.pieColors}/>
+                            </Col>
+                        </Row>
+                        <Table striped bordered condensed hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>WEEK #{this.state.week - pastweek} - KPIs</th>
+                                    <th>{this.state.segData[0].name}</th>
+                                    <th>{this.state.segData[1].name}</th>
+                                    <th>{this.state.segData[2].name}</th>
+                                    <th>{this.state.segData[3].name}</th>
+                                    <th>{this.state.segData[4].name}</th>
+                                    <th>All Pages</th>
+                                    <th>Evolution</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <KPIsTableLine_UP kpiName="Indexable Pages" stateWeek={this.state.week} kpiKey="comp_pages"/>
+                                <KPIsTableLine_DOWN kpiName="Not Indexable Pages" stateWeek={this.state.week} kpiKey="notcomp_pages"/>
+                                <KPIsTableLine_UP kpiName="Crawled Indexable Pages" stateWeek={this.state.week} kpiKey="crawled_comp_pages"/>
+                                <KPIsTableLine_DOWN kpiName="Crawled Not Indexable Pages" stateWeek={this.state.week} kpiKey="crawled_notcomp_pages"/>
+                                <KPIsTableLine_UP kpiName="Active Indexable Pages" stateWeek={this.state.week} kpiKey="active_comp_pages"/>
+                                <KPIsTableLine_UP kpiName="Active Not Indexable Pages" stateWeek={this.state.week} kpiKey="active_notcomp_pages"/>            
+                            </tbody>
+                        </Table>
+                        <div className="spacediv"></div>
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <CourseTable kpiName={this.state.kpi} kpiTextDef={this.state.kpiTextDef} kpiTextImpo={this.state.kpiTextDef} kpiTextToDo={this.state.kpiTextToDo} />
+                            </Col>
+                        </Row>
+                        <div className="spacediv"></div>
+                        <ButtonToolbar>
+                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeekTest(event)} >Go To The Next Week!</Button>
+                        </ButtonToolbar>
+                        <div className="spacediv"></div>
+                        
+                    </Tab.Pane>
+
+                    <Tab.Pane eventKey="second-4">
+                        <div className="title-div">
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">Structural KPIs Analysis</h1>
+                            <p className="title-p">Let's learn about your website Structural KPIs.
+                            <br/>Use the buttons below to select a KPI and analyze it.</p>
+                            
+                        </div>
+                        <Row className="show-grid">
+                            <div className="kpis-selection">
+                                <ButtonToolbar className="kpis-tab">
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Avg. Internal Links', 'avg_inlinks')}>Internal Links</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Avg. Depth', 'avg_depth')}>Depth</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Avg. Load Times', 'avg_loadtimes')}>Load Times</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Broken Links', 'avg_badhttp')}>Broken Links</Button>
+                                </ButtonToolbar>
+                            </div>
+                        </Row>
+
+                        <KPIsRow kpi={this.state.kpi} kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo} 
+                            title1="Selected KPI"
+                            title2="KPI value"
+                            title3="KPI evolution"/>
+                            
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Row className="show-grid">
+                            <Col md={12} lg={6}>
+                                <ChartBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} fill="#000" />
+                            </Col>
+                            <Col md={12} lg={6}>
+                                <ChartRadialBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Table striped bordered condensed hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>WEEK #{this.state.week - pastweek} - KPIs</th>
+                                    <th>{this.state.segData[0].name}</th>
+                                    <th>{this.state.segData[1].name}</th>
+                                    <th>{this.state.segData[2].name}</th>
+                                    <th>{this.state.segData[3].name}</th>
+                                    <th>{this.state.segData[4].name}</th>
+                                    <th>All Pages</th>
+                                    <th>Evolution</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <KPIsTableLine_UP kpiName="Avg. Internal Links" stateWeek={this.state.week} kpiKey="avg_inlinks"/>
+                                <KPIsTableLine_DOWN kpiName="Avg. Depth" stateWeek={this.state.week} kpiKey="avg_depth" />
+                                <KPIsTableLine_DOWN kpiName="Avg. Load Times" stateWeek={this.state.week} kpiKey="avg_loadtimes" />
+                                <KPIsTableLine_DOWN kpiName="Broken Links" stateWeek={this.state.week} kpiKey="avg_badhttp" />            
+                            </tbody>
+                        </Table>
+                        <div className="spacediv"></div>
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <CourseTable kpiName={this.state.kpi} kpiTextDef={this.state.kpiTextDef} kpiTextImpo={this.state.kpiTextDef} kpiTextToDo={this.state.kpiTextToDo} />
+                            </Col>
+                        </Row>
+
+                        <div className="spacediv"></div>
+
+                    </Tab.Pane>
+
+
+                    <Tab.Pane eventKey="second-5">
+                        <div className="title-div">
+                            <Image src={teacherguy} responsive className="smallimage" />
+                            <h1 className="title-h1">Quality KPIs Analysis</h1>
+                            <p className="title-p">Let's learn about your website Quality KPIs.
+                            <br/>Use the buttons below to select a KPI and analyze it.</p>
+                        </div>
+                        <Row className="show-grid">
+                            <div className="kpis-selection">
+                                <ButtonToolbar className="kpis-tab">
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Duplicate Titles %', 'pct_duptitles')}>Duplicate Titles</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Avg. Words', 'avg_words')}>Words</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Avg. Unicity %', 'avg_unicity')}>Unicity</Button>
+                                    
+                                    <Button bsStyle="default" bsSize="large" 
+                                    className="kpibut-2" 
+                                    onClick={event=> this.displayEVO(event,'Anchors Variations', 'avg_AnchorsVar')}>Anchors Variations</Button>
+                                </ButtonToolbar>
+                            </div>
+                        </Row>
+
+                        <KPIsRow kpi={this.state.kpi} kpiValue={this.state.kpiValue} kpiEvo={this.state.kpiEvo} 
+                            title1="Selected KPI"
+                            title2="KPI value"
+                            title3="KPI evolution"/>
+                            
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <ChartEvo kpiName={this.state.kpi} data={this.state.evoData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Row className="show-grid">
+                            <Col md={12} lg={6}>
+                                <ChartBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} fill="#000" />
+                            </Col>
+                            <Col md={12} lg={6}>
+                                <ChartRadialBar kpiName={this.state.kpi} data={this.state.segData} dataKey={this.state.selected_kpi} />
+                            </Col>
+                        </Row>
+                        <Table striped bordered condensed hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>WEEK #{this.state.week - pastweek} - KPIs</th>
+                                    <th>{this.state.segData[0].name}</th>
+                                    <th>{this.state.segData[1].name}</th>
+                                    <th>{this.state.segData[2].name}</th>
+                                    <th>{this.state.segData[3].name}</th>
+                                    <th>{this.state.segData[4].name}</th>
+                                    <th>All Pages</th>
+                                    <th>Evolution</th>
+                                </tr>
+                            </thead>
+                            
+                            <tbody>
+                                <KPIsTableLine_DOWN kpiName="Duplicate Titles %" stateWeek={this.state.week} kpiKey="pct_duptitles" pct="%"/>
+                                <KPIsTableLine_UP kpiName="Avg. Words" stateWeek={this.state.week} kpiKey="avg_words" />
+                                <KPIsTableLine_DOWN kpiName="Avg. Unicity %" stateWeek={this.state.week} kpiKey="avg_unicity" />
+                                <KPIsTableLine_UP kpiName="Avg. Anchors Variations" stateWeek={this.state.week} kpiKey="avg_AnchorsVar" />            
+                            </tbody>
+                        </Table>
+                        <div className="spacediv"></div>
+                        <Row className="show-grid">
+                            <Col xs={12}>
+                                <CourseTable kpiName={this.state.kpi} kpiTextDef={this.state.kpiTextDef} kpiTextImpo={this.state.kpiTextDef} kpiTextToDo={this.state.kpiTextToDo} />
                             </Col>
                         </Row>
                         
                         <div className="spacediv"></div>
                         
-              </Tab.Pane>
-              
-              
-              
-              
-              
-              
-              
-              <Tab.Pane eventKey="second" >
+                    </Tab.Pane>
+
+                    <Tab.Pane eventKey="fourth">
                         <div className="title-div">
-                            <Image src={teacherguy} responsive className="smallimage" />
-                            <h1 className="title-h1">SEO KPIs Analysis</h1>
-                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
+                            <Image src={techguy} responsive className="smallimage" />
+                            <h1 className="title-h1">SEO Technical Tasks</h1>
+                            <p className="title-p">Hi SEO Guy, I'm the Tech Guy. What should I work on?
+                            <br/>Use the tasks table below to select your Technical Tasks.</p>
                         </div>
+                        
+                        <div className="spacediv"></div>
+                        
                         <Row className="show-grid">
-                           <div className="kpis-selection">
-                                <ButtonToolbar className="kpis-tab">
-                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits','visits', this.state.evoData[week].visits, this.evoDiff(evoData, this.state.week, "visits"), kpiTextData.visits.def, kpiTextData.visits.todo)}>Visits</Button>
-                                    
-                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Pages', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Pages</Button>
-                                    
-                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Active Pages','active_pages', this.state.evoData[week].active_pages, this.evoDiff(evoData, this.state.week, "active_pages"), kpiTextData.active_pages.def, kpiTextData.active_pages.todo)}>Active Pages</Button>
-                                    
-                                    <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Visits by Active Page', 'visits_byAP', this.state.evoData[week].visits_byAP, this.evoDiff(evoData, this.state.week, "visits_byAP"),kpiTextData.visits_byAP.def, kpiTextData.visits_byAP.todo)}>Visits by AP</Button>
-                                </ButtonToolbar>                              
-                            </div>                            
-                        </Row>
-
-                        <Row className="show-grid">
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Selected KPI</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="bigkpitext">{this.state.kpi}</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
-
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">KPI value</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
+                            <Col md={12} lg={12}>
+                               
+                                <Row className="show-grid">
+                                    <Col md={12} lg={6}>
+                                        <div className="left-1">
+                                            <Row className="col-1">
+                                               <Col xs={12} className="kpi-box">
+                                                <div className="intro-kpi">
+                                                    <span className="intro-kpitext">Credits left to spend on Technical Tasks</span>
+                                                </div>
+                                               <div className="bigkpi">
+                                                  <span className="bigkpitext" style={style3}>{this.state.creditsTech} credits</span>
+                                                </div>
+                                               </Col>
+                                            </Row>
                                         </div>
                                     </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">KPI evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
-                            </Col>
-                        </Row>
-                        <Row className="show-grid">
-                            <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
-
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
-                        </Row>
-                        <Row className="show-grid">
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, by templates</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <BarChart data={this.state.segData}>
-                                      <XAxis dataKey="name" />
-                                      <YAxis />
-                                      <CartesianGrid strokeDasharray="3 3" />
-                                      <Tooltip />
-
-                                      <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, Distribution</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>          
-                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>               
-                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/> 
-                                    </RadialBarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>   
-                        </Col>
-                      </Row>  
-                                                                      
-                      <Row className="show-grid">
-                        <Col xs={12}>
-                                <Table striped bordered condensed hover responsive className="def-tab">
-                                    <tbody>
-                                        <tr>
-                                            <td className="def-tab-labels">Selected KPI</td>
-                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Definition</td>
-                                            <td className="def-tab-text">{this.state.kpiTextDef}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Why it's important?</td>
-                                            <td className="def-tab-text">Because it's important!</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">What should I do?</td>
-                                            <td className="def-tab-text">{this.state.kpiTextToDo}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Col>
-                      </Row>
-
-                        <ButtonToolbar>
-                            <Button bsStyle="primary" bsSize="large" className="nextbutton"  onClick={event => this.goToNextWeekTest(event)} >Go To The Next Week!</Button>
-                        </ButtonToolbar>
-  <Table striped bordered condensed hover responsive>
-    <thead>
-      <tr>
-        <th>WEEK #{this.state.week - pastweek} - KPIs</th>
-        <th>Top Tail</th>
-        <th>Middle Tail</th>
-        <th>Long Tail</th>
-        <th>Paginations</th>
-        <th>Useless</th>
-        <th>Total</th>
-        <th>Diff</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Visits</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["visits"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["visits"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["visits"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["visits"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["visits"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["visits"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "visits"))}>{this.evoDiff(evoData, this.state.week, "visits")}%</td>
-      </tr>
-      <tr>
-        <td>Total Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "pages"))}>{this.evoDiff(evoData, this.state.week, "pages")}%</td>
-      </tr>
-      <tr>
-        <td>Active Ratio (Indexable Pages)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["active_ratio_oncomp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["active_ratio_oncomp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["active_ratio_oncomp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["active_ratio_oncomp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["active_ratio_oncomp"])}%</td>
-        <td>{numberWithCommas(evoData[this.state.week]["active_ratio_oncomp"])}%</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "active_ratio_oncomp"))}>{this.evoDiff(evoData, this.state.week, "active_ratio_oncomp")}%</td>
-      </tr>
-      <tr>
-        <td>Crawl Ratio (Indexable Pages)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["crawled_ratio_comp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["crawled_ratio_comp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["crawled_ratio_comp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["crawled_ratio_comp"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["crawled_ratio_comp"])}%</td>
-        <td>{numberWithCommas(evoData[this.state.week]["crawl_ratio_oncomp"])}%</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "crawl_ratio_oncomp"))}>{this.evoDiff(evoData, this.state.week, "crawl_ratio_oncomp")}%</td>
-      </tr>
-      <tr>
-        <td>Indexability Ratio</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["indexable_ratio"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["indexable_ratio"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["indexable_ratio"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["indexable_ratio"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["indexable_ratio"])}%</td>
-        <td>{numberWithCommas(evoData[this.state.week]["indexable_ratio"])}%</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "indexable_ratio"))}>{this.evoDiff(evoData, this.state.week, "indexable_ratio")}%</td>
-      </tr>
-      <tr>
-        <td>Visits (Comp)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["visits_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["visits_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["visits_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["visits_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["visits_comp"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["visits_comp"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "visits_comp"))}>{this.evoDiff(evoData, this.state.week, "visits_comp")}%</td>
-      </tr>
-      <tr>
-        <td>Visits by Active Page (Comp)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["visits_byAP_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["visits_byAP_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["visits_byAP_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["visits_byAP_comp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["visits_byAP_comp"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["visits_byAP_comp"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "visits_byAP_comp"))}>{this.evoDiff(evoData, this.state.week, "visits_byAP_comp")}%</td>
-      </tr>
-      <tr>
-        <td>Active Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["active_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["active_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["active_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["active_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["active_comp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["active_comp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "active_comp_pages"))}>{this.evoDiff(evoData, this.state.week, "active_comp_pages")}%</td>
-      </tr>
-      <tr>
-        <td>Crawled Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["crawled_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["crawled_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["crawled_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["crawled_comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["crawled_comp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["crawled_comp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "crawled_comp_pages"))}>{this.evoDiff(evoData, this.state.week, "crawled_comp_pages")}%</td>
-      </tr>
-      <tr>
-        <td>Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["comp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["comp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["comp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "comp_pages"))}>{this.evoDiff(evoData, this.state.week, "comp_pages")}%</td>
-      </tr>
-      <tr>
-        <td>Visits (Not Comp)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["visits_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["visits_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["visits_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["visits_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["visits_notcomp"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["visits_notcomp"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "visits_notcomp"))}>{this.evoDiff(evoData, this.state.week, "visits_notcomp")}%</td>
-      </tr>
-      <tr>
-        <td>Visits by Active Page (Not Comp)</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["visits_byAP_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["visits_byAP_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["visits_byAP_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["visits_byAP_notcomp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["visits_byAP_notcomp"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["visits_byAP_notcomp"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "visits_byAP_notcomp"))}>{this.evoDiff(evoData, this.state.week, "visits_byAP_notcomp")}%</td>
-      </tr>
-      <tr>
-        <td>Active Not Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["active_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["active_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["active_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["active_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["active_notcomp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["active_notcomp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "active_notcomp_pages"))}>{this.evoDiff(evoData, this.state.week, "active_notcomp_pages")}%</td>
-      </tr>
-      <tr>
-        <td>Crawled Not Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["crawled_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["crawled_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["crawled_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["crawled_notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["crawled_notcomp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["crawled_notcomp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "crawled_notcomp_pages"))}>{this.evoDiff(evoData, this.state.week, "crawled_notcomp_pages")}%</td>
-      </tr>
-      <tr>
-        <td>Not Indexable Pages</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["notcomp_pages"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["notcomp_pages"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["notcomp_pages"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "notcomp_pages"))}>{this.evoDiff(evoData, this.state.week, "notcomp_pages")}%</td>
-      </tr>
-
-      <tr>
-        <td>Internal Links</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_inlinks"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_inlinks"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_inlinks"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_inlinks"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_inlinks"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_inlinks"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_inlinks"))}>{this.evoDiff(evoData, this.state.week, "avg_inlinks")}%</td>
-      </tr>
-      <tr>
-        <td>Depth</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_depth"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_depth"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_depth"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_depth"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_depth"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_depth"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_depth"))}>{this.evoDiff(evoData, this.state.week, "avg_depth")}%</td>
-      </tr>
-      <tr>
-        <td>Load Times</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_loadtimes"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_loadtimes"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_loadtimes"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_loadtimes"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_loadtimes"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_loadtimes"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_loadtimes"))}>{this.evoDiff(evoData, this.state.week, "avg_loadtimes")}%</td>
-      </tr>
-      <tr>
-        <td>Broken Links</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_badhttp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_badhttp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_badhttp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_badhttp"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_badhttp"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_badhttp"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_badhttp"))}>{this.evoDiff(evoData, this.state.week, "avg_badhttp")}%</td>
-      </tr>
-      <tr>
-        <td>% Duplicate Titles</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["pct_duptitles"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["pct_duptitles"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["pct_duptitles"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["pct_duptitles"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["pct_duptitles"])}%</td>
-        <td>{numberWithCommas(evoData[this.state.week]["pct_duptitles"])}%</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "pct_duptitles"))}>{this.evoDiff(evoData, this.state.week, "pct_duptitles")}%</td>
-      </tr>
-      <tr>
-        <td>Words</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_words"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_words"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_words"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_words"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_words"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_words"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_words"))}>{this.evoDiff(evoData, this.state.week, "avg_words")}%</td>
-      </tr>
-      <tr>
-        <td>% Unicity</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_unicity"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_unicity"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_unicity"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_unicity"])}%</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_unicity"])}%</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_unicity"])}%</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_unicity"))}>{this.evoDiff(evoData, this.state.week, "avg_unicity")}%</td>
-      </tr>
-      <tr>
-        <td>Anchors Variations</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][0]["avg_AnchorsVar"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][1]["avg_AnchorsVar"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][2]["avg_AnchorsVar"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][3]["avg_AnchorsVar"])}</td>
-        <td>{numberWithCommas(allSegData[this.state.week-1][4]["avg_AnchorsVar"])}</td>
-        <td>{numberWithCommas(evoData[this.state.week]["avg_AnchorsVar"])}</td>
-        <td style={this.setColorUp(this.evoDiff(evoData, this.state.week, "avg_AnchorsVar"))}>{this.evoDiff(evoData, this.state.week, "avg_AnchorsVar")}%</td>
-      </tr>
-    </tbody>
-  </Table>
-             
-             
-             
-             
-             
-             
-              </Tab.Pane>
-                  <Tab.Pane eventKey="second-2" >
-                        <div className="title-div">
-                            <Image src={teacherguy} responsive className="smallimage" />
-                            <h1 className="title-h1">Main SEO Ratios</h1>
-                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
-                        </div>
- 
-<Row className="show-grid">
-                           <div className="kpis-selection">
-                                <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Indexability Ratio', 'indexable_ratio', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Indexability Ratio</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawl Ratio', 'crawl_ratio_oncomp', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Crawl Ratio</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Ratio', 'active_ratio_oncomp', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Active Ratio</Button>                              
-                                </ButtonToolbar>                         
-                            </div>                            
-                        </Row>
-
-                        <Row className="show-grid">
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Selected KPI</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="bigkpitext">{this.state.kpi}</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
-
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">KPI value</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}%</span>
-                                        </div>
+                                    <Col md={12} lg={6}>
+                                        <ButtonToolbar className="kpis-tab">
+                                            <Button bsStyle="default" bsSize="large" 
+                                            className="kpibut-24" 
+                                            onClick={event=> this.validateTasksTECH(event)}>Validate Tasks Selection</Button>
+                                        </ButtonToolbar>
                                     </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">KPI evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
-                            </Col>
-                        </Row>
-                        <Row className="show-grid">
-                            <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
-
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
-                        </Row>
-                        <Row className="show-grid">
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, by templates</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <BarChart data={this.state.segData}>
-                                      <XAxis dataKey="name" />
-                                      <YAxis />
-                                      <CartesianGrid strokeDasharray="3 3" />
-                                      <Tooltip />
-
-                                      <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, Distribution</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>          
-                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>               
-                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/> 
-                                    </RadialBarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>   
-                        </Col>
-                      </Row>  
-                                                                      
-                      <Row className="show-grid">
-                        <Col xs={12}>
-                                <Table striped bordered condensed hover responsive className="def-tab">
-                                    <tbody>
-                                        <tr>
-                                            <td className="def-tab-labels">Selected KPI</td>
-                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Definition</td>
-                                            <td className="def-tab-text">{this.state.kpiTextDef}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Why it's important?</td>
-                                            <td className="def-tab-text">Because it's important!</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">What should I do?</td>
-                                            <td className="def-tab-text">{this.state.kpiTextToDo}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Col>
-                      </Row>
-              </Tab.Pane>
-               
-    
-               
-               
-
-               
-
-               
-               
-               
- 
-                  <Tab.Pane eventKey="second-3" >
-                        <div className="title-div">
-                            <Image src={teacherguy} responsive className="smallimage" />
-                            <h1 className="title-h1">Search Engines KPIs</h1>
-                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
-                        </div>
- 
-<Row className="show-grid">
-                           <div className="kpis-selection">
-                                <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Indexable Pages', 'comp_pages', this.state.evoData[week].comp_pages, this.evoDiff(evoData, this.state.week, "comp_pages"),kpiTextData.comp_pages.def, kpiTextData.comp_pages.todo)}>Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Index. Pages', 'crawled_comp_pages', this.state.evoData[week].crawled_comp_pages, this.evoDiff(evoData, this.state.week, "crawled_comp_pages"),kpiTextData.crawled_comp_pages.def, kpiTextData.crawled_comp_pages.todo)}>Crawled Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Index. Pages', 'active_comp_pages', this.state.evoData[week].active_comp_pages, this.evoDiff(evoData, this.state.week, "active_comp_pages"),kpiTextData.active_comp_pages.def, kpiTextData.active_comp_pages.todo)}>Active Indexable</Button>                                 
-                                </ButtonToolbar>
+                                </Row>
+                                <BootstrapTable ref='table1' data={techTasks} selectRow={ selectRowProp } striped hover>
+                                  <TableHeaderColumn isKey dataField='id' width="7%" dataSort={ true }>#</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='kpi' width="17%" dataSort={ true }>KPIs</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='pages' width="17%" dataSort={ true }>Pages</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='name' width="52%" dataSort={ true }>Tasks</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='credits' width="7%">Credits</TableHeaderColumn>                  
+                                </BootstrapTable>                             
                                 
-                                <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Not Indexable Pages', 'notcomp_pages', this.state.evoData[week].notcomp_pages, this.evoDiff(evoData, this.state.week, "notcomp_pages"),kpiTextData.notcomp_pages.def, kpiTextData.notcomp_pages.todo)}>Not Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Crawled Not Index. Pages', 'crawled_notcomp_pages', this.state.evoData[week].crawled_notcomp_pages, this.evoDiff(evoData, this.state.week, "crawled_notcomp_pages"),kpiTextData.crawled_notcomp_pages.def, kpiTextData.crawled_notcomp_pages.todo)}>Crawled Not Indexable</Button>
-                                  
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-23" onClick={event => this.displayEVO(event,'Active Not Index. Pages', 'active_notcomp_pages', this.state.evoData[week].active_notcomp_pages, this.evoDiff(evoData, this.state.week, "active_notcomp_pages"),kpiTextData.active_notcomp_pages.def, kpiTextData.active_notcomp_pages.todo)}>Active Not Indexable</Button>
-                                </ButtonToolbar>                           
-                            </div>                            
-                        </Row>
-
-                        <Row className="show-grid">
-
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Selected KPI</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="bigkpitext">{this.state.kpi}</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
-
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">KPI value</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
-                                        </div>
-                                    </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">KPI evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
+                                <div className="spacediv"></div>
+                                <div className="spacediv"></div> 
+                           
                             </Col>
                         </Row>
-                        <Row className="show-grid">
-                            <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
-
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
-                        </Row>
-                        <Row className="show-grid">
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, by templates</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <BarChart data={this.state.segData}>
-                                      <XAxis dataKey="name" />
-                                      <YAxis />
-                                      <CartesianGrid strokeDasharray="3 3" />
-                                      <Tooltip />
-
-                                      <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, Distribution</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>          
-                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>               
-                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/> 
-                                    </RadialBarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>   
-                        </Col>
-                      </Row>  
-                                                                      
-                      <Row className="show-grid">
-                        <Col xs={12}>
-                                <Table striped bordered condensed hover responsive className="def-tab">
-                                    <tbody>
-                                        <tr>
-                                            <td className="def-tab-labels">Selected KPI</td>
-                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Definition</td>
-                                            <td className="def-tab-text">{this.state.kpiTextDef}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Why it's important?</td>
-                                            <td className="def-tab-text">Because it's important!</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">What should I do?</td>
-                                            <td className="def-tab-text">{this.state.kpiTextToDo}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Col>
-                      </Row>
-              </Tab.Pane>               
-               
-               
- 
-               
-                             
-                                           
-
-                                                                       
-                                                                                                                                              
-                                                                                        
-                 <Tab.Pane eventKey="second-4" >
+                        
+                        
+                    </Tab.Pane>
+                    
+                    <Tab.Pane eventKey="third">
+                       
                         <div className="title-div">
-                            <Image src={teacherguy} responsive className="smallimage" />
-                            <h1 className="title-h1">Structural KPIs Analysis</h1>
-                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
+                            <Image src={marketinggirl} responsive className="smallimage" />
+                            <h1 className="title-h1">SEO Marketing Tasks</h1>
+                            <p className="title-p">Hi SEO Guy, I'm the Marketing Girl. What should I work on?
+                            <br/>Use the tasks table below to select your Marketing Tasks.</p>
                         </div>
-                        <Row className="show-grid">
-                           <div className="kpis-selection">
-                                <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Internal Links', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Internal Links</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Depth', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Depth</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Avg. Load Times', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Load Times</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Broken Links', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Broken Links</Button>
-                                </ButtonToolbar>                              
-                            </div>                            
-                        </Row>
-
-                        <Row className="show-grid">
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Selected KPI</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="bigkpitext">{this.state.kpi}</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
-
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">KPI value</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
-                                        </div>
-                                    </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">KPI evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
-                            </Col>
-                        </Row>
-                        <Row className="show-grid">
-                            <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
-
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
-                        </Row>
-                        <Row className="show-grid">
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, by templates</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <BarChart data={this.state.segData}>
-                                      <XAxis dataKey="name" />
-                                      <YAxis />
-                                      <CartesianGrid strokeDasharray="3 3" />
-                                      <Tooltip />
-
-                                      <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, Distribution</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>          
-                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>               
-                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/> 
-                                    </RadialBarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>   
-                        </Col>
-                      </Row>  
-                                                                      
-                      <Row className="show-grid">
-                        <Col xs={12}>
-                                <Table striped bordered condensed hover responsive className="def-tab">
-                                    <tbody>
-                                        <tr>
-                                            <td className="def-tab-labels">Selected KPI</td>
-                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Definition</td>
-                                            <td className="def-tab-text">{this.state.kpiTextDef}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Why it's important?</td>
-                                            <td className="def-tab-text">Because it's important!</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">What should I do?</td>
-                                            <td className="def-tab-text">{this.state.kpiTextToDo}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Col>
-                      </Row>
-             
-             
-             
-              </Tab.Pane>
-
-
-                                                                                                                                                  
-                                                                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-              <Tab.Pane eventKey="second-5" >
-                        <div className="title-div">
-                            <Image src={teacherguy} responsive className="smallimage" />
-                            <h1 className="title-h1">Quality KPIs Analysis</h1>
-                            <p className="title-p">Use the buttons below to select a KPI and analyze it.</p>
-                        </div>
-                        <Row className="show-grid">
-                           <div className="kpis-selection">
-                                <ButtonToolbar className="kpis-tab">
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Dup. Titles', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Dup. Titles</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Words', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Words</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Similar Pages Ratio', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Similarity %</Button>
-                                  <Button bsStyle="default" bsSize="large" className="kpibut-2" onClick={event => this.displayEVO(event,'Anchors Variations', 'pages', this.state.evoData[week].pages, this.evoDiff(evoData, this.state.week, "pages"),kpiTextData.pages.def, kpiTextData.pages.todo)}>Anchors Variations</Button>
-                                </ButtonToolbar>                              
-                            </div>                            
-                        </Row>
-
-                        <Row className="show-grid">
-                            <Col md={12} lg={6}>
-                                <div className="left-1">
-                                    <Row className="col-1">
-                                       <Col xs={12} className="kpi-box">
-                                        <div className="intro-kpi">
-                                            <span className="intro-kpitext">Selected KPI</span>
-                                        </div>
-                                       <div className="bigkpi">
-                                          <span className="bigkpitext">{this.state.kpi}</span>
-                                        </div>
-                                       </Col>
-                                    </Row>
-
-
-                                </div>
-                            </Col>
-                            <Col md={12} lg={6}>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi1">
-                                            <span className="intro-kpitext">KPI value</span>
-                                        </div>
-                                        <div className="smallkpi">
-                                            <span className="smallkpitext">{numberWithCommas(this.state.kpiValue)}</span>
-                                        </div>
-                                    </Col>
-                                    <Col xs={6} className="kpi-box">
-                                        <div className="intro-kpi2">
-                                            <span className="intro-kpitext">KPI evolution</span>
-                                        </div>
-                                        <div className="smallevo">
-                                          <span className="smallevotext" style={this.setColorUp(this.state.kpiEvo)}>{numberWithCommas(this.state.kpiEvo)}%</span>
-                                        </div>
-                                    </Col>                               
-                            </Col>
-                        </Row>
-                        <Row className="show-grid">
-                            <Col xs={12}>
-                                <div className="left-1">
-                                   <h3>{this.state.kpi}, evolution</h3>
-                                   <div className="box-4">
-                                       <ResponsiveContainer height={130}>
-                                        <AreaChart data={this.state.evoData}
-                                            margin={{top: 20, right: 30, left: 0, bottom: 0}}>
-                                          <XAxis dataKey="name"/>
-                                          <YAxis/>
-                                          <CartesianGrid strokeDasharray="3 3"/>
-                                          <Tooltip/>
-                                          <Area type='monotoneX' dataKey={this.state.selected_kpi} stroke='#000' fill='#000' dot={{ stroke: '#666', strokeWidth: 1 }}/>
-                                        </AreaChart>
-
-                                    </ResponsiveContainer>
-                                   </div>
-                                </div>                                
-                            </Col>    
-                        </Row>
-                        <Row className="show-grid">
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, by templates</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <BarChart data={this.state.segData}>
-                                      <XAxis dataKey="name" />
-                                      <YAxis />
-                                      <CartesianGrid strokeDasharray="3 3" />
-                                      <Tooltip />
-
-                                      <Bar dataKey={this.state.selected_kpi} fill="#000" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col md={6} lg={6}>
-                            <div className="left-1">
-                            <h3>{this.state.kpi}, Distribution</h3>
-                                <div className="box-3">
-                                <ResponsiveContainer height={230}>
-                                    <RadialBarChart width={800} height={300} cx={230} cy={150} innerRadius={20} outerRadius={140} barSize={13} data={this.state.segData}>          
-                                        <RadialBar minAngle={15} label background clockWise={true} dataKey={this.state.selected_kpi}/>               
-                                        <Legend iconSize={10} width={400} height={140} layout='horizontal' verticalAlign='bottom' align="center" wrapperStyle={style}/> 
-                                    </RadialBarChart>
-                                </ResponsiveContainer>
-                                </div>
-                            </div>   
-                        </Col>
-                      </Row>  
-                                                                      
-                      <Row className="show-grid">
-                        <Col xs={12}>
-                                <Table striped bordered condensed hover responsive className="def-tab">
-                                    <tbody>
-                                        <tr>
-                                            <td className="def-tab-labels">Selected KPI</td>
-                                            <td className="def-tab-labels-kpi">{this.state.kpi}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Definition</td>
-                                            <td className="def-tab-text">{this.state.kpiTextDef}</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">Why it's important?</td>
-                                            <td className="def-tab-text">Because it's important!</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="def-tab-labels">What should I do?</td>
-                                            <td className="def-tab-text">{this.state.kpiTextToDo}</td>
-                                        </tr>
-                                    </tbody>
-                                </Table>
-                            </Col>
-
-                      </Row>
-             
-             
-             
-              </Tab.Pane>                                                                                                                                                 
-
-                
-                
-                
-                
-                
-                
-                
-            
-                <Tab.Pane eventKey="third" >
-    <h2>SEO Marketing Tasks<br/></h2>
+                        
+                        <div className="spacediv"></div>
+                        
                         <Row className="show-grid">
                             <Col md={12} lg={12}>
-                                <div className="left-1"><h3>The Marketing Team</h3>
-                                   <Row className="col-1">
-                                       <Col xs={4} className="box-1">
-                                          <Image src={marketgirl} responsive className="guyimage" />
-                                       </Col>
-                                       <Col xs={8} className="box-2">
-
-                                        <p className="guytext-2">
-                                           <span className="indicator">{this.state.marketIntro}</span>
-                                           <br/><br/>
-                                           <span className="indicator">{this.state.marketText}</span>
-                                           <br/><br/>
-                                           <span className="indicator">{this.state.marketConslusion}</span>
-                                        </p>
-
-
-                                       </Col>
-                                   </Row>
-
-                                </div>
-
-
+                               
+                                <Row className="show-grid">
+                                    <Col md={12} lg={6}>
+                                        <div className="left-1">
+                                            <Row className="col-1">
+                                               <Col xs={12} className="kpi-box">
+                                                <div className="intro-kpi">
+                                                    <span className="intro-kpitext">Credits left to spend on Marketing Tasks</span>
+                                                </div>
+                                               <div className="bigkpi">
+                                                  <span className="bigkpitext" style={style3}>{this.state.creditsMarket} credits</span>
+                                                </div>
+                                               </Col>
+                                            </Row>
+                                        </div>
+                                    </Col>
+                                    <Col md={12} lg={6}>
+                                        <ButtonToolbar className="kpis-tab">
+                                            <Button bsStyle="default" bsSize="large" 
+                                            className="kpibut-24" 
+                                            onClick={this.open}>Validate Tasks Selection</Button>
+                                        </ButtonToolbar>
+                                    </Col>
+                                </Row>
+                                <BootstrapTable ref='table2' data={marketTasks} selectRow={ selectRowProp2 } striped hover>
+                                  <TableHeaderColumn isKey dataField='id' width="7%" dataSort={ true }>#</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='kpi' width="17%" dataSort={ true }>KPIs</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='pages' width="17%" dataSort={ true }>Pages</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='name' width="52%" dataSort={ true }>Tasks</TableHeaderColumn>
+                                  <TableHeaderColumn dataField='credits' width="7%">Credits</TableHeaderColumn>                  
+                                </BootstrapTable>                             
+                                
+                                <div className="spacediv"></div>
+                                <div className="spacediv"></div> 
+                           
                             </Col>
+                            
+                            <Modal show={this.state.showModal} onHide={this.close}>
+                              <Modal.Header closeButton>
+                                <Modal.Title>Modal heading</Modal.Title>
+                              </Modal.Header>
+                              <Modal.Body>
+                                <h4>Text in a modal</h4>
+                                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+                                <h4>Overflowing text to show scroll behavior</h4>
+                                <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+
+                              </Modal.Body>
+                              <Modal.Footer>
+                                <Button onClick={this.close}>Close</Button>
+                              </Modal.Footer>
+                            </Modal>
 
                         </Row>
-                </Tab.Pane>
-
-                <Tab.Pane eventKey="fourth">
-    <h2>SEO Technical Tasks<br/></h2>
-                        <Row className="show-grid">
-                            <Col md={12} lg={12}>
-                                <div className="left-1"><h3>The Tech Team</h3>
-                                   <Row className="col-1">
-                                       <Col xs={4} className="box-1">
-                                          <Image src={techguy} responsive className="guyimage" />
-                                       </Col>
-                                       <Col xs={8} className="box-2">
-
-                                            <div className="guytext-2">
-                                                <h4>{this.state.kpiTextDefTag}</h4>
-                                                <span className="indicator">{this.state.seoCourse}</span> {this.state.kpiTextDef}
-                                                <br/>
-                                                <h4>{this.state.kpiTextToDoTag}</h4> {this.state.kpiTextToDo}
-                                                <span className="indicator">{this.state.seoConclusion}</span>
-                                            </div>
-
-
-                                       </Col>
-                                   </Row>
-
-                                </div>
-
-
-
-                            </Col>
-
-                        </Row>
-                </Tab.Pane>
-                <Tab.Pane eventKey="fith">
-                  <h2 className="weektitle">You have 5 Credits left to spend this month on Marketing or Technical Tasks.<br/><br/>Are you sure you want to go to the next week?<br/><br/></h2>
+                    </Tab.Pane>
+                    
+                    <Tab.Pane eventKey="fith">
+                        <h2 className="weektitle">You have {this.state.creditsTech + this.state.creditsMarket} Credits left to spend this week on Marketing or Technical Tasks.<br/><br/>Are you sure you want to go to the next week?<br/><br/></h2>
                         <ButtonToolbar>
-                            <Button bsStyle="primary" bsSize="large" className="nextbutton"  onClick={event => this.goToNextWeek(event)} >Go To The Next Week!</Button>
+                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeek(event)} >Yes, Go To The Next Week!</Button>
                         </ButtonToolbar>
-                </Tab.Pane>
-              </Tab.Content>
+                        
+                        <div className="spacediv-week"></div>
+                    </Tab.Pane>
+                </Tab.Content>
             </Col>
         </Row>
     </Tab.Container>

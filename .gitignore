@@ -19,3 +19,6 @@
 .byebug_history
 /public/packs
 /node_modules
+app/javascript/packs/assets/images/Untitled.pyxel
+app/javascript/packs/components/BasicData.jsx
+app/javascript/packs/components/ChartEvo.jsx
