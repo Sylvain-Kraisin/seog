@@ -49,7 +49,7 @@ const style = {
 console.log(random(0.5,1));
 
 var week = 0;
-const pastweek = 6;
+const pastweek = 17;
 var weekLabels = ["W1"];
 
 console.log("natevo");
