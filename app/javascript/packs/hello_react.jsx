@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Legend, Bar, RadialBarChart, RadialBar, PieChart, Pie, Sector, Cell} from 'recharts'
 //import ReactFitText from 'react-fittext'
-import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table, Modal} from 'react-bootstrap'
+import { Row, Col, Tabs, Tab, Nav, NavItem, Image, ButtonToolbar, Button, Table, Modal, NavDropdown, MenuItem} from 'react-bootstrap'
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
@@ -32,7 +32,8 @@ import {techTasks, marketTasks} from './data/tasks';
 //Import Images
 import logo from './assets/images/logo.png'
 import head from './assets/images/UpDown-Bald-Head.gif'
-import techguy from './assets/images/tech.jpeg'
+//import techguy from './assets/images/tech.jpeg'
+import techguy from './assets/images/UpDown-Bald-Head-Thin.gif'
 import teacherguy from './assets/images/teacher.jpeg'
 import bossguy from './assets/images/boss.jpeg'
 import marketinggirl from './assets/images/marketing.jpeg'
@@ -1245,6 +1246,7 @@ export default class Boss_Start extends Component {
             showModal: false
         };
         this.goToNextWeek = this.goToNextWeek.bind(this);
+        this.howtoTab = this.howtoTab.bind(this);
         this.missionTab = this.missionTab.bind(this);
         this.analysisTab = this.analysisTab.bind(this);
         this.marketingTab = this.marketingTab.bind(this);
@@ -1264,7 +1266,19 @@ export default class Boss_Start extends Component {
       
     }
  
-
+    howtoTab(event) {
+        this.setState({
+            week: week,
+            kpi: 'Visits',
+            evoData: evoData,
+            segData: segData,
+            segData_pie: segData_pie.visits,
+            selected_kpi: 'visits',
+            key: 'zero',
+            kpiValue: evoData[this.state.week].visits,
+            kpiEvo: this.evoDiff(evoData, this.state.week, "visits"),
+        });
+    }
 
     missionTab(event) {
         this.setState({
@@ -1690,7 +1704,7 @@ export default class Boss_Start extends Component {
        
         <Col xs={2} className="logo">
             <center>
-                <h1>SEO GUY</h1></center>
+                <h1>Sim SEO</h1></center>
                 
         </Col>
         <Col xs={10} className="top-bar">
@@ -1701,33 +1715,37 @@ export default class Boss_Start extends Component {
         <Row className="clearfix main-div">
             <Col xs={2} className="sidebar">
                 <Nav bsStyle="pills" stacked>
+                    <NavItem eventKey="zero">
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.howtoTab(event)} className="barbutton">How To Play?</Button>
+                    </NavItem>
                     <NavItem eventKey="first">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.missionTab(event)} className="barbutton">Your Mission</Button>
+                        <Button bsStyle="default" bsSize="large" onClick={event=> this.missionTab(event)} className="barbutton">Mission Status</Button>
                     </NavItem>
-                    <NavItem eventKey="second">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.analysisTab(event)} className="barbutton">Main SEO KPIs</Button>
-                    </NavItem>
-                    <NavItem eventKey="second-2">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.ratioTab(event)} className="barbutton">Main SEO Ratios</Button>
-                    </NavItem>
-                    <NavItem eventKey="second-3">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.pagesTab(event)} className="barbutton">Pages KPIs</Button>
-                    </NavItem>
-                    <NavItem eventKey="second-4">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.structureTab(event)} className="barbutton">Structural KPIs</Button>
-                    </NavItem>
-                    <NavItem eventKey="second-5">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.qualityTab(event)} className="barbutton">Quality KPIs</Button>
-                    </NavItem>
-                    <NavItem eventKey="fourth">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.techTab(event)} className="barbutton">Technical Tasks</Button>
-                    </NavItem>
-                    <NavItem eventKey="third">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.marketingTab(event)} className="barbutton">Marketing Tasks</Button>
-                    </NavItem>
-                    <NavItem eventKey="fith">
-                        <Button bsStyle="default" bsSize="large" onClick={event=> this.nextweekTab(event)} className="barbutton">Go To Next Week</Button>
-                    </NavItem>
+                    <NavDropdown eventKey="x" title="Website Analysis" id="nav-dropdown">
+                        <NavItem eventKey="second">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.analysisTab(event)} className="barbutton2">Main SEO KPIs</Button>
+                        </NavItem>
+                        <NavItem eventKey="second-2">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.ratioTab(event)} className="barbutton2">Main SEO Ratios</Button>
+                        </NavItem>
+                        <NavItem eventKey="second-3">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.pagesTab(event)} className="barbutton2">Pages KPIs</Button>
+                        </NavItem>
+                        <NavItem eventKey="second-4">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.structureTab(event)} className="barbutton2">Structural KPIs</Button>
+                        </NavItem>
+                        <NavItem eventKey="second-5">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.qualityTab(event)} className="barbutton2">Quality KPIs</Button>
+                        </NavItem>
+                    </NavDropdown>
+                    <NavDropdown eventKey="y" title="Tasks Selection" id="nav-dropdown">
+                        <NavItem eventKey="fourth">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.techTab(event)} className="barbutton2">Technical Tasks</Button>
+                        </NavItem>
+                        <NavItem eventKey="third">
+                            <Button bsStyle="default" bsSize="large" onClick={event=> this.marketingTab(event)} className="barbutton2">Marketing Tasks</Button>
+                        </NavItem>     
+                    </NavDropdown>
                     <NavItem eventKey="sixth">
                         <Button bsStyle="default" bsSize="large" onClick={event=> this.supportTab(event)} className="barbutton">Support Us!</Button>
                     </NavItem>
@@ -1735,12 +1753,19 @@ export default class Boss_Start extends Component {
             </Col>
             <Col xs={10} className="maincontent">
                 <Tab.Content animation>
+                    <Tab.Pane eventKey="zero">
+                        
+                        <h1>Sim SEO: The First Search Engine Optimisation Simulation Game</h1>
+
+                        <div className="spacediv"></div>
+
+                    </Tab.Pane>
                     <Tab.Pane eventKey="first">
 
                         <div className="title-div">
                             <Image src={bossguy} responsive className="smallimage" />
                             <h1 className="title-h1">Mission Status</h1>
-                            <p className="title-p">Hi SEO Guy, I'm your new boss and the CEO of LicornesMagazine.com.
+                            <p className="title-p">Hi SEO Guy, I'm your new boss and the CEO of <a target="_blank"  href="http://www.licornesmagazine.com">LicornesMagazine.com</a>.
                             <br/>I need you to generate 100K visits per month ASAP! Don't disappoint me!</p>
                         </div>
 
@@ -2251,7 +2276,7 @@ export default class Boss_Start extends Component {
                                         <ButtonToolbar className="kpis-tab">
                                             <Button bsStyle="default" bsSize="large" 
                                             className="kpibut-24" 
-                                            onClick={event=> this.validateTasksTECH(event)}>Validate Tasks Selection</Button>
+                                            onClick={event=> this.validateTasksTECH(event)}>Go to the next week</Button>
                                         </ButtonToolbar>
                                     </Col>
                                 </Row>
@@ -2305,7 +2330,7 @@ export default class Boss_Start extends Component {
                                         <ButtonToolbar className="kpis-tab">
                                             <Button bsStyle="default" bsSize="large" 
                                             className="kpibut-24" 
-                                            onClick={this.open}>Validate Tasks Selection</Button>
+                                            onClick={this.open}>Go to the next week</Button>
                                         </ButtonToolbar>
                                     </Col>
                                 </Row>
@@ -2341,14 +2366,6 @@ export default class Boss_Start extends Component {
                         </Row>
                     </Tab.Pane>
                     
-                    <Tab.Pane eventKey="fith">
-                        <h2 className="weektitle">You have {this.state.creditsTech + this.state.creditsMarket} Credits left to spend this week on Marketing or Technical Tasks.<br/><br/>Are you sure you want to go to the next week?<br/><br/></h2>
-                        <ButtonToolbar>
-                            <Button bsStyle="primary" bsSize="large" className="nextbutton" onClick={event=> this.goToNextWeek(event)} >Yes, Go To The Next Week!</Button>
-                        </ButtonToolbar>
-                        
-                        <div className="spacediv-week"></div>
-                    </Tab.Pane>
                 </Tab.Content>
             </Col>
         </Row>
